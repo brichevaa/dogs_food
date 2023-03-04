@@ -18,13 +18,15 @@ function App() {
    const [cards, setCards] = useState([]);
    const [searchQuery, setSearchQuery] = useState(undefined);
    const [currentUser, setCurrentUser] = useState({});
+   const [favorites, setFavorites] = useState([]);
 
-   // const filteredCards = (products, id) =>
-   //    products.filter((e) => e.author._id === id);
-   // console.log(cards);
+   const filteredCards = (products, id) =>
+      products.filter((e) => e.author._id === id);
 
    const handleSearch = (search) => {
-      api.searchProducts(search).then((data) => setCards([...data]));
+      api.searchProducts(search).then((data) =>
+         setCards(filteredCards(data, currentUser._id))
+      );
    };
 
    // console.log({ currentUser });
@@ -38,13 +40,13 @@ function App() {
               const newCards = cards.map((e) =>
                  e._id === newCard._id ? newCard : e
               );
-              setCards([...newCards]);
+              setCards(filteredCards(newCards, currentUser._id));
            })
          : api.addLike(product._id).then((newCard) => {
               const newCards = cards.map((e) =>
                  e._id === newCard._id ? newCard : e
               );
-              setCards([...newCards]);
+              setCards(filteredCards(newCards, currentUser._id));
            });
    }
 
@@ -56,7 +58,7 @@ function App() {
       Promise.all([api.getUserInfo(), api.getProductList()]).then(
          ([userData, productData]) => {
             setCurrentUser(userData);
-            setCards(productData.products);
+            setCards(filteredCards(productData.products, userData._id));
          }
       );
    }, []);
@@ -93,7 +95,12 @@ function App() {
       searchQuery,
       setSearchQuery,
    };
-   const contextCardValue = { cards, handleProductLike };
+   const contextCardValue = {
+      cards,
+      handleProductLike,
+      favorites,
+      setFavorites,
+   };
 
    return (
       <>

@@ -16,7 +16,7 @@ class Api {
       this._baseUrl = data.baseUrl;
       this._headers = data.headers;
    }
-   getProductList(page = 3) {
+   getProductList(page = 4) {
       return fetch(`${this._baseUrl}/products?page=${page}`, {
          headers: this._headers,
       }).then((res) => onResponse(res));
