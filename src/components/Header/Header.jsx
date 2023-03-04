@@ -4,6 +4,7 @@ import './header.css';
 import { Icons } from './Icons/Icons';
 import { useContext } from 'react';
 import { CardContext } from '../../context/cardContext';
+import { Link } from 'react-router-dom';
 
 export const Header = () => {
    const { favorites } = useContext(CardContext);
@@ -17,7 +18,9 @@ export const Header = () => {
                      <Logo />
                   </div>
                   <Search />
-                  <div>{favorites.length}</div>
+                  <div>
+                     <Link to="/favorites">{favorites.length}</Link>
+                  </div>
                   <div className="header__right">
                      <Icons />
                   </div>

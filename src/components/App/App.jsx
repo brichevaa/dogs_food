@@ -13,6 +13,7 @@ import { UserContext } from '../../context/userContext';
 import { CardContext, Cardcontext } from '../../context/cardContext';
 import { FaqPage } from '../../pages/FAQ/FaqPage';
 import { NotFound } from '../../pages/NotFound/NotFound';
+import { Favorites } from '../../pages/Favorites/Favorites';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -133,6 +134,7 @@ function App() {
                         element={<ProductPage />}
                      ></Route>
                      <Route path="faq" element={<FaqPage />}></Route>
+                     <Route path="/favorites" element={<Favorites />}></Route>
                      <Route path="*" element={<NotFound />}></Route>
                   </Routes>
                </main>
