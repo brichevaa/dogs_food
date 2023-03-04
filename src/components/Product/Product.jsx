@@ -6,6 +6,7 @@ import { ReactComponent as Save } from './img/save.svg';
 import { useContext, useEffect, useState } from 'react';
 import { api } from '../../utils/api';
 import { UserContext } from '../../context/userContext';
+import { findLike } from '../../utils/utils';
 
 // const product_id = '63ecf77059b98b038f77b65f';
 
@@ -16,7 +17,7 @@ export const Product = ({ id }) => {
    }, [id]);
 
    const currentUser = useContext(UserContext);
-   const isLiked = product?.likes?.some((el) => el === currentUser._id);
+   const isLiked = findLike(product, currentUser);
 
    return (
       <>

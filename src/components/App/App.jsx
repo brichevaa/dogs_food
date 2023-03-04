@@ -4,7 +4,7 @@ import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 import './App.css';
 import { api } from '../../utils/api';
-import { useDebounce } from '../../utils/utils';
+import { findLike, useDebounce } from '../../utils/utils';
 
 import { Route, Routes } from 'react-router-dom';
 import { CatalogPage } from '../../pages/Catalog/CatalogPage';
@@ -20,8 +20,10 @@ function App() {
    const [currentUser, setCurrentUser] = useState({});
    const [favorites, setFavorites] = useState([]);
 
-   const filteredCards = (products, id) =>
-      products.filter((e) => e.author._id === id);
+   const filteredCards = (products, id) => {
+      // return products;
+      return products.filter((e) => e.author._id === id);
+   };
 
    const handleSearch = (search) => {
       api.searchProducts(search).then((data) =>
@@ -34,20 +36,25 @@ function App() {
    const debounceValueInApp = useDebounce(searchQuery, 500);
 
    function handleProductLike(product) {
-      const isLiked = product.likes.some((el) => el === currentUser._id);
+      const isLiked = findLike(product, currentUser);
       isLiked
          ? api.deleteLike(product._id).then((newCard) => {
               const newCards = cards.map((e) =>
                  e._id === newCard._id ? newCard : e
               );
               setCards(filteredCards(newCards, currentUser._id));
+              setFavorites((favor) =>
+                 favor.filter((f) => f._id !== newCard._id)
+              );
            })
          : api.addLike(product._id).then((newCard) => {
               const newCards = cards.map((e) =>
                  e._id === newCard._id ? newCard : e
               );
               setCards(filteredCards(newCards, currentUser._id));
+              setFavorites((favor) => [...favor, newCard]);
            });
+      console.log({ isLiked });
    }
 
    useEffect(() => {
@@ -58,7 +65,12 @@ function App() {
       Promise.all([api.getUserInfo(), api.getProductList()]).then(
          ([userData, productData]) => {
             setCurrentUser(userData);
-            setCards(filteredCards(productData.products, userData._id));
+            const items = filteredCards(productData.products, userData._id);
+            setCards(items);
+
+            const fav = items.filter((e) => findLike(e, userData));
+            // console.log(fav);
+            setFavorites(fav);
          }
       );
    }, []);
