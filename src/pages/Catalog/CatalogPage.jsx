@@ -3,6 +3,7 @@ import { CardList } from '../../components/CardList/CardList';
 import { CardContext } from '../../context/cardContext';
 import { UserContext } from '../../context/userContext';
 import { getIssues } from '../../utils/utils';
+import { NotFound } from '../NotFound/NotFound';
 import './index.css';
 
 export const CatalogPage = () => {
@@ -26,6 +27,7 @@ export const CatalogPage = () => {
                {getIssues(cards.length)}
             </p>
          )}
+         <NotFound />
          <div className="sort-cards">
             {sortItems.map((e) => (
                <span
