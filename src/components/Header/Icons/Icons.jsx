@@ -7,13 +7,13 @@ export const Icons = () => {
    return (
       <>
          <a href="/">
-            <img src={logoFavorite} alt="лого лайк" className="logo__main" />
+            <img src={logoFavorite} alt="лого лайк" className="logo__icons" />
          </a>
          <a href="/">
-            <img src={logoPath} alt="лого корзина" className="logo__main" />
+            <img src={logoPath} alt="лого корзина" className="logo__icons" />
          </a>
          <a href="/">
-            <img src={logoDog} alt="лого собака" className="logo__main" />
+            <img src={logoDog} alt="лого собака" className="logo__icons" />
          </a>
       </>
    );

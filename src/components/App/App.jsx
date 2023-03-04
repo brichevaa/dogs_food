@@ -1,21 +1,33 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { CardList } from '../CardList/CardList';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 import './App.css';
-// import data from '../../data/data.json';
-import { api, getProductList, getUserInfo } from '../../utils/api';
-import { getIssues, useDebounce } from '../../utils/utils';
+import { api } from '../../utils/api';
+import { useDebounce } from '../../utils/utils';
+
+import { Route, Routes } from 'react-router-dom';
+import { CatalogPage } from '../../pages/Catalog/CatalogPage';
+import { ProductPage } from '../../pages/Product/ProductPage';
+import { UserContext } from '../../context/userContext';
+import { CardContext, Cardcontext } from '../../context/cardContext';
+import { FaqPage } from '../../pages/FAQ/FaqPage';
+import { NotFound } from '../../pages/NotFound/NotFound';
 
 function App() {
    const [cards, setCards] = useState([]);
-   const [searchQuery, setSearchQuery] = useState('');
+   const [searchQuery, setSearchQuery] = useState(undefined);
    const [currentUser, setCurrentUser] = useState({});
 
+   // const filteredCards = (products, id) =>
+   //    products.filter((e) => e.author._id === id);
+   // console.log(cards);
+
    const handleSearch = (search) => {
-      api.searchProducts(search).then((data) => setCards(() => [...data]));
+      api.searchProducts(search).then((data) => setCards([...data]));
    };
+
+   // console.log({ currentUser });
 
    const debounceValueInApp = useDebounce(searchQuery, 500);
 
@@ -49,29 +61,65 @@ function App() {
       );
    }, []);
 
-   const Search = {
-      fontWeight: '800',
+   const setSortCards = (sort) => {
+      console.log(sort);
+      if (sort === 'Сначала дешёвые') {
+         const newCards = cards.sort((a, b) => a.price - b.price);
+         setCards([...newCards]);
+      }
+      if (sort === 'Сначала дорогие') {
+         const newCards = cards.sort((a, b) => b.price - a.price);
+         setCards([...newCards]);
+      }
+      if (sort === 'Популярные') {
+         const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
+         setCards([...newCards]);
+      }
+      if (sort === 'Новинки') {
+         const newCards = cards.sort(
+            (a, b) => new Date(a.created_at) - new Date(b.created_at)
+         );
+         setCards([...newCards]);
+      }
+      if (sort === 'По скидке') {
+         const newCards = cards.sort((a, b) => b.discount - a.discount);
+         setCards([...newCards]);
+      }
    };
+
+   const contextValue = {
+      setSort: setSortCards,
+      currentUser,
+      searchQuery,
+      setSearchQuery,
+   };
+   const contextCardValue = { cards, handleProductLike };
 
    return (
       <>
-         <Header setSearchQuery={setSearchQuery} />
+         <UserContext.Provider value={contextValue}>
+            <CardContext.Provider value={contextCardValue}>
+               <Header />
 
-         <main className="content container">
-            {searchQuery && (
-               <p>
-                  По запросу <span style={Search}>{searchQuery}</span> найдено{' '}
-                  {cards.length}
-                  {getIssues(cards.length)}
-               </p>
-            )}
-         </main>
-         <CardList
-            currentUser={currentUser}
-            cards={cards}
-            handleProductLike={handleProductLike}
-         />
-         <Footer />
+               <main className="content container">
+                  <Routes>
+                     <Route
+                        path="/"
+                        element={
+                           <CatalogPage handleProductLike={handleProductLike} />
+                        }
+                     ></Route>
+                     <Route
+                        path="/product/:productId"
+                        element={<ProductPage />}
+                     ></Route>
+                     <Route path="faq" element={<FaqPage />}></Route>
+                     <Route path="*" element={<NotFound />}></Route>
+                  </Routes>
+               </main>
+               <Footer />
+            </CardContext.Provider>
+         </UserContext.Provider>
       </>
    );
 }

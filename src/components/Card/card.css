@@ -5,6 +5,7 @@
    align-items: flex-start;
    padding: 10px;
    border-radius: 10px;
+   justify-content: space-between;
 }
 
 .card:hover {
@@ -65,6 +66,7 @@
 .card__name {
    font-size: 16px;
    line-height: 1.25;
+   padding-bottom: 15px;
 }
 
 .card__discount {
@@ -121,6 +123,7 @@
    text-decoration: none;
    display: inline-block;
    transition: background-color 0.3s;
+   font-family: 'Nunito';
 }
 
 .btn_type_primary {

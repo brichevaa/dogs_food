@@ -5,39 +5,65 @@ import logoWhatsapp from './whatsapp.svg';
 import logoPhone from './phone.svg';
 import logoInstagram from './instagram.svg';
 import logoVK from './vk.svg';
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
+   const user = useContext(UserContext);
+
    return (
       <div className="footer">
          <div className="container">
             <div className="footer__contact contact-hero">
-               <div className="contact-hero__item">
+               <div className="contact-hero__item-one">
                   <Logo />
+
                   <div className="footer__c">
                      © «Интернет-магазин DogFood.ru»
                   </div>
                </div>
                <div className="contact-hero__item">
                   <div className="footer__title">
-                     <p>Каталог</p>
-                     <p>Акции</p>
-                     <p>Новости</p>
-                     <p>Отзывы</p>
+                     <div className="footer__title-text">
+                        <a href="/">Каталог</a>
+                     </div>
+                     <div className="footer__title-text">
+                        <a href="/">Акции</a>
+                     </div>
+                     <div className="footer__title-text">
+                        <a href="/">Новости</a>
+                     </div>
+                     <div>
+                        <a href="/">Отзывы</a>
+                     </div>
                   </div>
                </div>
                <div className="contact-hero__item">
                   <div className="footer__title">
-                     <p>Оплата и доставка</p>
-                     <p>Часто спрашивают</p>
-                     <p>Обратная связь</p>
-                     <p>Контакты</p>
+                     <div className="footer__title-text">
+                        <a href="/">Оплата и доставка</a>
+                     </div>
+                     <div className="footer__title-text">
+                        <Link to={'/faq'}>Часто спрашивают</Link>
+                     </div>
+                     <div className="footer__title-text">
+                        <a href="/">Обратная связь</a>
+                     </div>
+                     <div>
+                        <a href="/">Контакты</a>
+                     </div>
                   </div>
                </div>
-               <div className="contact-hero__item">
-                  <h3>Мы на связи</h3>
-                  <h3>8 (999) 00-00-00</h3>
+               <div className="contact-hero__item contact-hero__item-last">
+                  <h3>
+                     <b>Мы на связи</b>
+                  </h3>
+                  <h3>
+                     <b>8 (999) 00-00-00</b>
+                  </h3>
                   <p>dogfood.ru@gmail.com</p>
-                  <div className="contact-hero__icons">
+                  <div className="contact-hero__icons ">
                      <a href="/">
                         <img src={logoTelegram} alt="logo telegram" />
                      </a>

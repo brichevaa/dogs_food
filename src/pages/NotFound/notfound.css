@@ -1,0 +1,19 @@
+.not-found {
+   height: 400px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 2rem;
+}
+.btn__not-found {
+   background-color: white;
+   border: 1px #cfd8dc solid;
+}
+.not-found__text {
+   font-size: 16px;
+   line-height: 20px;
+   font-weight: bold;
+   max-width: 250px;
+   text-align: center;
+}
