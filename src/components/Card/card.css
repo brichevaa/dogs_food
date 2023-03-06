@@ -105,6 +105,10 @@
 .card__favorite_active {
    fill: red;
 }
+.card__favorite_active-none {
+   fill: transparent;
+   stroke: black;
+}
 
 .card__cart {
    margin-top: auto;

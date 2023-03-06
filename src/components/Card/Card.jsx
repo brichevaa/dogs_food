@@ -29,7 +29,9 @@ export const Card = ({
          <div className="card__sticky card__sticky_top-right">
             <button
                className={`card__favorite ${
-                  isLiked ? 'card__favorite_active' : ''
+                  isLiked
+                     ? 'card__favorite_active'
+                     : 'card__favorite_active-none'
                }`}
                onClick={handleLikeClick}
             >
