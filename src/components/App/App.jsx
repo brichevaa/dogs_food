@@ -55,7 +55,6 @@ function App() {
               setCards(filteredCards(newCards, currentUser._id));
               setFavorites((favor) => [...favor, newCard]);
            });
-      console.log({ isLiked });
    }
 
    useEffect(() => {
@@ -123,12 +122,7 @@ function App() {
 
                <main className="content container">
                   <Routes>
-                     <Route
-                        path="/"
-                        element={
-                           <CatalogPage handleProductLike={handleProductLike} />
-                        }
-                     ></Route>
+                     <Route path="/" element={<CatalogPage />}></Route>
                      <Route
                         path="/product/:productId"
                         element={<ProductPage />}

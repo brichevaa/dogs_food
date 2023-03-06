@@ -39,7 +39,7 @@ export const CatalogPage = () => {
                </span>
             ))}
          </div>
-         <CardList />
+         <CardList cards={cards} />
       </>
    );
 };

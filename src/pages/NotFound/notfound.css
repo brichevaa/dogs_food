@@ -4,7 +4,7 @@
    flex-direction: column;
    align-items: center;
    justify-content: center;
-   gap: 2rem;
+   gap: 1rem;
 }
 .btn__not-found {
    background-color: white;
@@ -16,4 +16,9 @@
    font-weight: bold;
    max-width: 250px;
    text-align: center;
+}
+.not-found__text-gray {
+   color: #7b8e98;
+   font-size: 14px;
+   line-height: 20px;
 }

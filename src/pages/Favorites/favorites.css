@@ -1,0 +1,14 @@
+.favorites {
+   margin: 20px 0px 0px 0px;
+}
+.favorites__h1 {
+   font-size: 28px;
+   font-weight: 800;
+   line-height: 32px;
+   margin: 10px 0px 20px 0px;
+}
+.favorites__back {
+   font-size: 14px;
+   line-height: 20px;
+   cursor: pointer;
+}

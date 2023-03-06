@@ -3,8 +3,8 @@ import { Card } from '../Card/Card';
 import { CardContext } from '../../context/cardContext';
 import { useContext } from 'react';
 
-export const CardList = () => {
-   const { cards, handleProductLike } = useContext(CardContext);
+export const CardList = ({ cards }) => {
+   const { handleProductLike } = useContext(CardContext);
 
    return (
       <div className="cards ">

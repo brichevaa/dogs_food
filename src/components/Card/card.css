@@ -6,6 +6,7 @@
    padding: 10px;
    border-radius: 10px;
    justify-content: space-between;
+   margin: 0px 0px 60px 0px;
 }
 
 .card:hover {
