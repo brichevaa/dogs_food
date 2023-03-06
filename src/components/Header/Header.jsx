@@ -2,12 +2,20 @@ import { Logo } from './Logo/Logo';
 import { Search } from './Search/Search';
 import './header.css';
 import { Icons } from './Icons/Icons';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CardContext } from '../../context/cardContext';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 
 export const Header = () => {
-   const { favorites } = useContext(CardContext);
+   const { basketCounter } = useContext(UserContext);
+   const [counter, setCounter] = useState(basketCounter);
+
+   useEffect(() => {
+      setCounter((st) => st + 1);
+
+      return () => setCounter(basketCounter);
+   }, [basketCounter]);
 
    return (
       <div className="header">
@@ -18,11 +26,9 @@ export const Header = () => {
                      <Logo />
                   </div>
                   <Search />
-                  <div>
-                     <Link to="/favorites">{favorites.length}</Link>
-                  </div>
+
                   <div className="header__right">
-                     <Icons />
+                     <Icons count={counter} />
                   </div>
                </div>
             </div>

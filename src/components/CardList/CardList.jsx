@@ -4,7 +4,7 @@ import { CardContext } from '../../context/cardContext';
 import { useContext } from 'react';
 
 export const CardList = ({ cards }) => {
-   const { handleProductLike } = useContext(CardContext);
+   const { setBasketCounter, handleProductLike } = useContext(CardContext);
 
    return (
       <div className="cards ">
@@ -14,6 +14,7 @@ export const CardList = ({ cards }) => {
                key={item._id}
                product={item}
                onProductLike={handleProductLike}
+               setBasketCounter={setBasketCounter}
             />
          ))}
       </div>

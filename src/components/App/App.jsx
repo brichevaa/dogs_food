@@ -20,6 +20,7 @@ function App() {
    const [searchQuery, setSearchQuery] = useState(undefined);
    const [currentUser, setCurrentUser] = useState({});
    const [favorites, setFavorites] = useState([]);
+   const [basketCounter, setBasketCounter] = useState(0);
 
    const filteredCards = (products, id) => {
       // return products;
@@ -106,12 +107,15 @@ function App() {
       currentUser,
       searchQuery,
       setSearchQuery,
+      basketCounter,
+      setBasketCounter,
    };
    const contextCardValue = {
       cards,
       handleProductLike,
       favorites,
       setFavorites,
+      setBasketCounter,
    };
 
    return (

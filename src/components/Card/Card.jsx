@@ -14,6 +14,7 @@ export const Card = ({
    price,
    discount,
    onProductLike,
+   setBasketCounter,
 }) => {
    const { currentUser } = useContext(UserContext);
 
@@ -46,9 +47,12 @@ export const Card = ({
                <p className="card__name">{name}</p>
             </div>
          </Link>
-         <a href="/" className="btn btn_type_primary ">
+         <span
+            onClick={() => setBasketCounter((state) => state + 1)}
+            className="btn btn_type_primary "
+         >
             В корзину
-         </a>
+         </span>
       </div>
    );
 };

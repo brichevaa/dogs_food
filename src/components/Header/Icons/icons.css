@@ -1,0 +1,21 @@
+.header__bubble {
+   background-color: #01a54e;
+   color: white;
+   font-size: 9px;
+   font-weight: 700;
+   width: 22px;
+   height: 22px;
+   border-radius: 50%;
+   position: absolute;
+   left: 60%;
+   bottom: 60%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 2px;
+   border: 3px solid #ffe44d;
+}
+.header__bubble-link {
+   text-decoration: none;
+   position: relative;
+}
