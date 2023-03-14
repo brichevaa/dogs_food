@@ -10,10 +10,12 @@ import { Route, Routes } from 'react-router-dom';
 import { CatalogPage } from '../../pages/Catalog/CatalogPage';
 import { ProductPage } from '../../pages/Product/ProductPage';
 import { UserContext } from '../../context/userContext';
-import { CardContext, Cardcontext } from '../../context/cardContext';
+import { CardContext } from '../../context/cardContext';
 import { FaqPage } from '../../pages/FAQ/FaqPage';
 import { NotFound } from '../../pages/NotFound/NotFound';
 import { Favorites } from '../../pages/Favorites/Favorites';
+import { RegistrationForm } from '../Form/RegistrationForm';
+import { Modal } from '../Modal/Modal';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -21,10 +23,11 @@ function App() {
    const [currentUser, setCurrentUser] = useState({});
    const [favorites, setFavorites] = useState([]);
    const [basketCounter, setBasketCounter] = useState(0);
+   const [modal, setModal] = useState(false);
 
    const filteredCards = (products, id) => {
-      // return products;
-      return products.filter((e) => e.author._id === id);
+      return products;
+      // return products.filter((e) => e.author._id === id);
    };
 
    const handleSearch = (search) => {
@@ -38,18 +41,22 @@ function App() {
    const debounceValueInApp = useDebounce(searchQuery, 500);
 
    function handleProductLike(product) {
+      // понимаем , отлайкан ли продукт
       const isLiked = findLike(product, currentUser);
       isLiked
-         ? api.deleteLike(product._id).then((newCard) => {
+         ? // Если товар был с лайком, значит было действие по удалению лайка
+           api.deleteLike(product._id).then((newCard) => {
+              // newCard - карточка с уже изменненым количеством лайков
               const newCards = cards.map((e) =>
                  e._id === newCard._id ? newCard : e
               );
               setCards(filteredCards(newCards, currentUser._id));
-              setFavorites((favor) =>
-                 favor.filter((f) => f._id !== newCard._id)
+              setFavorites((state) =>
+                 state.filter((f) => f._id !== newCard._id)
               );
            })
-         : api.addLike(product._id).then((newCard) => {
+         : // Если не отлайкан, значит действие было совершено для добавления лайка.
+           api.addLike(product._id).then((newCard) => {
               const newCards = cards.map((e) =>
                  e._id === newCard._id ? newCard : e
               );
@@ -59,18 +66,23 @@ function App() {
    }
 
    useEffect(() => {
+      if (debounceValueInApp === undefined) return;
       handleSearch(debounceValueInApp);
    }, [debounceValueInApp]);
 
+   // Первоначальная загрузка карточек/продуктов/постов/сущностей и данных юзера
    useEffect(() => {
       Promise.all([api.getUserInfo(), api.getProductList()]).then(
          ([userData, productData]) => {
+            // сеттим юзера
             setCurrentUser(userData);
             const items = filteredCards(productData.products, userData._id);
+            // сеттим карточки
             setCards(items);
-
+            console.log(items);
+            // получаем отлайканные нами карточки
             const fav = items.filter((e) => findLike(e, userData));
-            // console.log(fav);
+            // сеттим карточки в избранный стейт
             setFavorites(fav);
          }
       );
@@ -111,11 +123,16 @@ function App() {
       setBasketCounter,
    };
    const contextCardValue = {
-      cards,
+      cards: cards,
       handleProductLike,
       favorites,
       setFavorites,
       setBasketCounter,
+   };
+
+   const sendData = async (data) => {
+      const res = await api.registerUser({ ...data, group: 'group-10' });
+      console.log(res);
    };
 
    return (
@@ -123,8 +140,13 @@ function App() {
          <UserContext.Provider value={contextValue}>
             <CardContext.Provider value={contextCardValue}>
                <Header />
-
                <main className="content container">
+                  <button className="btn" onClick={() => setModal(true)}>
+                     Show modal
+                  </button>
+                  <Modal modal={modal} setModal={setModal}>
+                     <RegistrationForm sendData={sendData} />
+                  </Modal>
                   <Routes>
                      <Route path="/" element={<CatalogPage />}></Route>
                      <Route

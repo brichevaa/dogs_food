@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-// import { CardContext } from '../../context/cardContext';
 import { UserContext } from '../../context/userContext';
 import { findLike } from '../../utils/utils';
 import './card.css';

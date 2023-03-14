@@ -3,7 +3,7 @@ const config = {
    headers: {
       'content-type': 'application/json',
       Authorization:
-         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2VjZmFmMjU5Yjk4YjAzOGY3N2I2NjAiLCJncm91cCI6Imdyb3VwLTEwIiwiaWF0IjoxNjc3ODQ0NDUwLCJleHAiOjE3MDkzODA0NTB9.FBCZfU7wvGQPxcqWNaA60Ivdv-B6p3hcp6rMgJqvThg',
+         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2VjZmFmMjU5Yjk4YjAzOGY3N2I2NjAiLCJncm91cCI6Imdyb3VwLTEwIiwiaWF0IjoxNjc4NzM5NzQ0LCJleHAiOjE3MTAyNzU3NDR9.sKEtTbSW4ipvx71k9-DN6YHad4tR-D3VmQ2ECvSUU58',
    },
 };
 
@@ -16,7 +16,7 @@ class Api {
       this._baseUrl = data.baseUrl;
       this._headers = data.headers;
    }
-   getProductList(page = 4) {
+   getProductList(page = 1) {
       return fetch(`${this._baseUrl}/products?page=${page}`, {
          headers: this._headers,
       }).then((res) => onResponse(res));
@@ -36,6 +36,13 @@ class Api {
    getUserInfo() {
       return fetch(`${this._baseUrl}/users/me`, {
          headers: this._headers,
+      }).then((res) => onResponse(res));
+   }
+   registerUser(data) {
+      return fetch(`${this._baseUrl}/signup`, {
+         headers: this._headers,
+         method: 'POST',
+         body: JSON.stringify(data),
       }).then((res) => onResponse(res));
    }
    searchProducts(query) {

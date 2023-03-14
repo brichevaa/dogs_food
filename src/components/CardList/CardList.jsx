@@ -8,7 +8,7 @@ export const CardList = ({ cards }) => {
 
    return (
       <div className="cards ">
-         {cards?.map((item) => (
+         {cards.map((item) => (
             <Card
                {...item}
                key={item._id}

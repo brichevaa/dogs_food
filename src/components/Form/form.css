@@ -1,0 +1,14 @@
+.form {
+   display: flex;
+   flex-direction: column;
+   gap: 0.5rem;
+   max-width: 400px;
+   font-size: 28px;
+   line-height: 32px;
+   font-weight: 800;
+}
+.form__input {
+   padding: 14px 16px;
+   border-radius: 12px;
+   border: 1px solid #cfd8dc;
+}

@@ -27,7 +27,7 @@ export const CatalogPage = () => {
                {getIssues(cards.length)}
             </p>
          )}
-         {!cards.length && <NotFound />}
+         {/* {!cards.length && <NotFound />} */}
          <div className="sort-cards">
             {sortItems.map((e) => (
                <span
