@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { CardContext } from '../../../context/cardContext';
 
-export const Icons = ({ count }) => {
+export const Icons = ({ count, setModal }) => {
    const { favorites } = useContext(CardContext);
 
    return (
@@ -21,9 +21,9 @@ export const Icons = ({ count }) => {
             <img src={logoPath} alt="лого корзина" className="logo__icons" />
             {count !== 0 && <span className="header__bubble">{count}</span>}
          </Link>
-         <a href="/">
+         <Link to={'/login'} onClick={() => setModal(true)}>
             <img src={logoDog} alt="лого собака" className="logo__icons" />
-         </a>
+         </Link>
       </>
    );
 };

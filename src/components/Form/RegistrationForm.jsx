@@ -11,7 +11,7 @@ export const RegistrationForm = ({ sendData }) => {
       console.log(data);
       // sendData(data);
    };
-   console.log({ errors });
+   // console.log({ errors });
 
    const nameRegister = {
       required: {

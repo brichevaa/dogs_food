@@ -16,6 +16,7 @@ import { NotFound } from '../../pages/NotFound/NotFound';
 import { Favorites } from '../../pages/Favorites/Favorites';
 import { RegistrationForm } from '../Form/RegistrationForm';
 import { Modal } from '../Modal/Modal';
+import { Login } from '../Login/Login';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -79,7 +80,7 @@ function App() {
             const items = filteredCards(productData.products, userData._id);
             // сеттим карточки
             setCards(items);
-            console.log(items);
+
             // получаем отлайканные нами карточки
             const fav = items.filter((e) => findLike(e, userData));
             // сеттим карточки в избранный стейт
@@ -139,7 +140,7 @@ function App() {
       <>
          <UserContext.Provider value={contextValue}>
             <CardContext.Provider value={contextCardValue}>
-               <Header />
+               <Header setModal={setModal} />
                <main className="content container">
                   <button className="btn" onClick={() => setModal(true)}>
                      Show modal
@@ -155,6 +156,14 @@ function App() {
                      ></Route>
                      <Route path="faq" element={<FaqPage />}></Route>
                      <Route path="/favorites" element={<Favorites />}></Route>
+                     <Route
+                        path="login"
+                        element={
+                           <Modal modal={modal} setModal={setModal}>
+                              <Login />
+                           </Modal>
+                        }
+                     ></Route>
                      <Route path="*" element={<NotFound />}></Route>
                   </Routes>
                </main>

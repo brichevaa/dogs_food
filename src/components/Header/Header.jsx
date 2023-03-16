@@ -7,7 +7,7 @@ import { CardContext } from '../../context/cardContext';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 
-export const Header = () => {
+export const Header = ({ setModal }) => {
    const { basketCounter } = useContext(UserContext);
    const [counter, setCounter] = useState(basketCounter);
 
@@ -28,7 +28,7 @@ export const Header = () => {
                   <Search />
 
                   <div className="header__right">
-                     <Icons count={counter} />
+                     <Icons count={counter} setModal={setModal} />
                   </div>
                </div>
             </div>

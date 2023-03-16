@@ -1,0 +1,28 @@
+.auth {
+}
+.auth__input {
+   padding: 14px 16px;
+   border-radius: 12px;
+   border: 1px solid #cfd8dc;
+   font-size: 16px;
+   line-height: 20px;
+   color: #7b8e98;
+}
+.auth__input:hover,
+.auth__input:focus {
+   border-color: #ffe44d;
+   caret-color: #ffe44d;
+}
+.auth__controls {
+   display: flex;
+   flex-direction: column;
+   gap: 0.5rem;
+}
+.auth__remove-password {
+   color: #7b8e98;
+   font-size: 14px;
+   line-height: 20px;
+   font-weight: normal;
+   text-align: right;
+   margin-bottom: 22px;
+}
