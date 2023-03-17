@@ -1,25 +1,46 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { BaseButton } from '../BaseButton/BaseButton';
-import { Form } from '../Form/Form';
-import './login.css';
+import { api } from '../../../utils/api';
+import { pattern } from '../../../utils/validations';
+import { BaseButton } from '../../BaseButton/BaseButton';
+import { Form } from '../../Form/Form';
+import '../auth.css';
 
-export const Login = () => {
+export const Login = ({ setModal }) => {
    const {
       register,
       handleSubmit,
       formState: { errors },
-   } = useForm();
+   } = useForm({ mode: 'onSubmit' });
 
    const navigate = useNavigate();
 
    const handleClick = (e) => {
       e.preventDefault();
-      navigate('/favorites');
+      navigate('/register');
    };
-   const sendData = (data) => {
-      console.log(data);
+   const sendData = async (data) => {
+      try {
+         const res = await api.login(data);
+         console.log(res);
+         localStorage.setItem('token', res.token);
+         navigate('/');
+      } catch (error) {
+         console.log('error');
+      }
    };
+   const emailRegister = register('email', {
+      required: 'Это обязательное поле',
+   });
+   const passwordRegister = register('password', {
+      required: 'Это обязательное поле',
+      pattern: pattern,
+   });
+
+   useEffect(() => {
+      setModal(true);
+   }, [setModal]);
 
    return (
       <>
@@ -29,21 +50,24 @@ export const Login = () => {
                   type="text"
                   placeholder="Email"
                   className="auth__input"
-                  {...register('email', {
-                     required: 'email is required',
-                  })}
+                  {...emailRegister}
                />
+               {errors?.email && (
+                  <span
+                     style={{
+                        fontSize: '10px',
+                        color: 'red',
+                        lineHeight: '12px',
+                     }}
+                  >
+                     {errors.email?.message}
+                  </span>
+               )}
                <input
                   type="password"
                   placeholder="Пароль"
                   className="auth__input"
-                  {...register('password', {
-                     pattern: {
-                        message:
-                           'Пароль должен содержать минимум 8 символов, одну букву латинского алфавита и одну цифру',
-                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-                     },
-                  })}
+                  {...passwordRegister}
                />
                {errors?.password && (
                   <span

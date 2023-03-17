@@ -69,6 +69,13 @@ class Api {
          method: 'PUT',
       }).then((res) => onResponse(res));
    }
+   login(userData) {
+      return fetch(`${this._baseUrl}/signin`, {
+         headers: this._headers,
+         method: 'POST',
+         body: JSON.stringify(userData),
+      }).then((res) => onResponse(res));
+   }
 }
 
 export const api = new Api(config);

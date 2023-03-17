@@ -16,7 +16,9 @@ import { NotFound } from '../../pages/NotFound/NotFound';
 import { Favorites } from '../../pages/Favorites/Favorites';
 import { RegistrationForm } from '../Form/RegistrationForm';
 import { Modal } from '../Modal/Modal';
-import { Login } from '../Login/Login';
+import { Login } from '../Auth/Login/Login';
+import { Register } from '../Auth/Register/Register';
+import { MainPage } from '../../pages/Main/MainPage';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -131,25 +133,28 @@ function App() {
       setBasketCounter,
    };
 
-   const sendData = async (data) => {
-      const res = await api.registerUser({ ...data, group: 'group-10' });
-      console.log(res);
-   };
+   // const sendData = async (data) => {
+   //    const res = await api.registerUser({ ...data, group: 'group-10' });
+   //    console.log(res);
+   // };
 
    return (
       <>
          <UserContext.Provider value={contextValue}>
             <CardContext.Provider value={contextCardValue}>
                <Header setModal={setModal} />
+               <Routes>
+                  <Route path="/" element={<MainPage />}></Route>
+               </Routes>
                <main className="content container">
-                  <button className="btn" onClick={() => setModal(true)}>
+                  {/* <button className="btn" onClick={() => setModal(true)}>
                      Show modal
-                  </button>
-                  <Modal modal={modal} setModal={setModal}>
+                  </button> */}
+                  {/* <Modal modal={modal} setModal={setModal}>
                      <RegistrationForm sendData={sendData} />
-                  </Modal>
+                  </Modal> */}
                   <Routes>
-                     <Route path="/" element={<CatalogPage />}></Route>
+                     <Route path="/catalog" element={<CatalogPage />}></Route>
                      <Route
                         path="/product/:productId"
                         element={<ProductPage />}
@@ -160,11 +165,19 @@ function App() {
                         path="login"
                         element={
                            <Modal modal={modal} setModal={setModal}>
-                              <Login />
+                              <Login setModal={setModal} />
                            </Modal>
                         }
                      ></Route>
-                     <Route path="*" element={<NotFound />}></Route>
+                     <Route
+                        path="register"
+                        element={
+                           <Modal modal={modal} setModal={setModal}>
+                              <Register setModal={setModal} />
+                           </Modal>
+                        }
+                     ></Route>
+                     {/* <Route path="*" element={<NotFound />}></Route> */}
                   </Routes>
                </main>
                <Footer />
