@@ -16,7 +16,7 @@
 .auth__controls {
    display: flex;
    flex-direction: column;
-   gap: 0.5rem;
+   gap: 1.5rem;
 }
 .auth__remove-password {
    color: #7b8e98;
@@ -24,7 +24,8 @@
    line-height: 20px;
    font-weight: normal;
    text-align: right;
-   margin-bottom: 22px;
+   /* margin-bottom: 22px; */
+   cursor: pointer;
 }
 .auth__remove-password-left {
    color: #7b8e98;
@@ -32,5 +33,5 @@
    line-height: 20px;
    font-weight: normal;
    text-align: left;
-   margin: 24px 0px 24px 0px;
+   /* margin: 24px 0px 24px 0px; */
 }

@@ -80,7 +80,10 @@ export const Login = ({ setModal }) => {
                      {errors.password?.message}
                   </span>
                )}
-               <span className="auth__remove-password">
+               <span
+                  className="auth__remove-password"
+                  onClick={() => navigate('/removepassword')}
+               >
                   Восстановить пароль
                </span>
                <BaseButton type="submit" color="yellow">

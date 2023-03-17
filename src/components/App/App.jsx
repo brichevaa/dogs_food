@@ -19,6 +19,7 @@ import { Modal } from '../Modal/Modal';
 import { Login } from '../Auth/Login/Login';
 import { Register } from '../Auth/Register/Register';
 import { MainPage } from '../../pages/Main/MainPage';
+import { RemovePassword } from '../Auth/RemovePassword/RemovePassword';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -174,6 +175,14 @@ function App() {
                         element={
                            <Modal modal={modal} setModal={setModal}>
                               <Register setModal={setModal} />
+                           </Modal>
+                        }
+                     ></Route>
+                     <Route
+                        path="removepassword"
+                        element={
+                           <Modal modal={modal} setModal={setModal}>
+                              <RemovePassword setModal={setModal} />
                            </Modal>
                         }
                      ></Route>
