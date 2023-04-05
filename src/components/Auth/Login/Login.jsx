@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../../../utils/api';
+import { authApi } from '../../../utils/authApi';
 import { pattern } from '../../../utils/validations';
 import { BaseButton } from '../../BaseButton/BaseButton';
 import { Form } from '../../Form/Form';
@@ -22,12 +22,12 @@ export const Login = ({ setModal }) => {
    };
    const sendData = async (data) => {
       try {
-         const res = await api.login(data);
-         console.log(res);
+         const res = await authApi.login(data);
+         // console.log(res);
          localStorage.setItem('token', res.token);
-         navigate('/');
+         navigate('/catalog');
       } catch (error) {
-         console.log('error');
+         alert('Неправильные логин и пароль');
       }
    };
    const emailRegister = register('email', {
@@ -82,7 +82,7 @@ export const Login = ({ setModal }) => {
                )}
                <span
                   className="auth__remove-password"
-                  onClick={() => navigate('/removepassword')}
+                  onClick={() => navigate('/remove-password')}
                >
                   Восстановить пароль
                </span>

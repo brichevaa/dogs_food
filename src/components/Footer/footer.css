@@ -1,6 +1,7 @@
 .footer {
    background-color: #ffe44d;
    width: 100%;
+   flex: 0 0 auto;
 }
 .footer__container {
    max-width: 992px;

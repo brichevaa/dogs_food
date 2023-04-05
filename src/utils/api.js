@@ -1,10 +1,19 @@
+const newHeaders = () => {
+   return {
+      headers: {
+         'content-type': 'application/json',
+         Authorization: localStorage.getItem('token'),
+      },
+   };
+};
+
 const config = {
    baseUrl: 'https://api.react-learning.ru',
    headers: {
       'content-type': 'application/json',
-      Authorization:
-         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2VjZmFmMjU5Yjk4YjAzOGY3N2I2NjAiLCJncm91cCI6Imdyb3VwLTEwIiwiaWF0IjoxNjc4NzM5NzQ0LCJleHAiOjE3MTAyNzU3NDR9.sKEtTbSW4ipvx71k9-DN6YHad4tR-D3VmQ2ECvSUU58',
+      Authorization: localStorage.getItem('token'),
    },
+   newHeaders: newHeaders,
 };
 
 const onResponse = (res) => {
@@ -15,65 +24,88 @@ class Api {
    constructor(data) {
       this._baseUrl = data.baseUrl;
       this._headers = data.headers;
+      this._newHeaders = data.newHeaders;
    }
    getProductList(page = 1) {
       return fetch(`${this._baseUrl}/products?page=${page}`, {
-         headers: this._headers,
+         ...this._newHeaders(),
       }).then((res) => onResponse(res));
    }
    getProductById(id) {
       return fetch(`${this._baseUrl}/products/${id}`, {
-         headers: this._headers,
+         ...this._newHeaders(),
       }).then((res) => onResponse(res));
    }
    addProduct(data) {
       return fetch(`${this._baseUrl}/products`, {
-         headers: this._headers,
+         ...this._newHeaders(),
          method: 'POST',
          body: JSON.stringify(data),
       }).then((res) => onResponse(res));
    }
    getUserInfo() {
       return fetch(`${this._baseUrl}/users/me`, {
-         headers: this._headers,
+         ...this._newHeaders(),
       }).then((res) => onResponse(res));
    }
-   registerUser(data) {
-      return fetch(`${this._baseUrl}/signup`, {
-         headers: this._headers,
-         method: 'POST',
-         body: JSON.stringify(data),
+   // PATCH https://api.react-learning.ru/users/me // изменение name и about
+   changeUserInfo(body) {
+      return fetch(`${this._baseUrl}/users/me`, {
+         ...this._newHeaders(),
+         method: 'PATCH',
+         body: JSON.stringify(body),
+      }).then((res) => onResponse(res));
+   }
+   // PATCH https://api.react-learning.ru/users/me/avatar // изменение avatar
+   changeAvatar(avatar) {
+      return fetch(`${this._baseUrl}/users/me/avatar`, {
+         ...this._newHeaders(),
+         method: 'PATCH',
+         body: JSON.stringify(avatar),
+      }).then((res) => onResponse(res));
+   }
+   getUsers() {
+      return fetch(`${this._baseUrl}/users`, {
+         ...this._newHeaders(),
       }).then((res) => onResponse(res));
    }
    searchProducts(query) {
       return fetch(`${this._baseUrl}/products/search?query=${query}`, {
-         headers: this._headers,
+         ...this._newHeaders(),
       }).then((res) => onResponse(res));
    }
    // like - true / false
    changeLikeProductStatus(productId, like) {
       return fetch(`${this._baseUrl}/products/likes/${productId}`, {
-         headers: this._headers,
+         ...this._newHeaders(),
          method: like ? 'PUT' : 'DELETE',
       }).then((res) => onResponse(res));
    }
+
    deleteLike(productId) {
       return fetch(`${this._baseUrl}/products/likes/${productId}`, {
-         headers: this._headers,
+         ...this._newHeaders(),
          method: 'DELETE',
       }).then((res) => onResponse(res));
    }
    addLike(productId) {
       return fetch(`${this._baseUrl}/products/likes/${productId}`, {
-         headers: this._headers,
+         ...this._newHeaders(),
          method: 'PUT',
       }).then((res) => onResponse(res));
    }
-   login(userData) {
-      return fetch(`${this._baseUrl}/signin`, {
-         headers: this._headers,
+   addReview(productId, body) {
+      return fetch(`${this._baseUrl}/products/review/${productId}`, {
+         ...this._newHeaders(),
          method: 'POST',
-         body: JSON.stringify(userData),
+         body: JSON.stringify(body),
+      }).then((res) => onResponse(res));
+   }
+   //  DELETE https://api.react-learning.ru/products/review/:productId/:reviewId
+   deleteReview(productId, reviewId) {
+      return fetch(`${this._baseUrl}/products/review/${productId}/${reviewId}`, {
+         ...this._newHeaders(),
+         method: 'DELETE',
       }).then((res) => onResponse(res));
    }
 }

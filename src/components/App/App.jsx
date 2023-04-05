@@ -6,7 +6,7 @@ import './App.css';
 import { api } from '../../utils/api';
 import { findLike, useDebounce } from '../../utils/utils';
 
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { CatalogPage } from '../../pages/Catalog/CatalogPage';
 import { ProductPage } from '../../pages/Product/ProductPage';
 import { UserContext } from '../../context/userContext';
@@ -14,12 +14,15 @@ import { CardContext } from '../../context/cardContext';
 import { FaqPage } from '../../pages/FAQ/FaqPage';
 import { NotFound } from '../../pages/NotFound/NotFound';
 import { Favorites } from '../../pages/Favorites/Favorites';
-import { RegistrationForm } from '../Form/RegistrationForm';
+
 import { Modal } from '../Modal/Modal';
 import { Login } from '../Auth/Login/Login';
 import { Register } from '../Auth/Register/Register';
 import { MainPage } from '../../pages/Main/MainPage';
 import { RemovePassword } from '../Auth/RemovePassword/RemovePassword';
+import { parseJwt } from '../../utils/parseJWT';
+import { Profile } from '../Profile/Profile';
+import { EditAccount } from '../EditAccount/EditAccount';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -28,6 +31,7 @@ function App() {
    const [favorites, setFavorites] = useState([]);
    const [basketCounter, setBasketCounter] = useState(0);
    const [modal, setModal] = useState(false);
+   const [isAuth, setIsAuth] = useState(false);
 
    const filteredCards = (products, id) => {
       return products;
@@ -35,9 +39,7 @@ function App() {
    };
 
    const handleSearch = (search) => {
-      api.searchProducts(search).then((data) =>
-         setCards(filteredCards(data, currentUser._id))
-      );
+      api.searchProducts(search).then((data) => setCards(filteredCards(data, currentUser._id)));
    };
 
    // console.log({ currentUser });
@@ -51,19 +53,13 @@ function App() {
          ? // Если товар был с лайком, значит было действие по удалению лайка
            api.deleteLike(product._id).then((newCard) => {
               // newCard - карточка с уже изменненым количеством лайков
-              const newCards = cards.map((e) =>
-                 e._id === newCard._id ? newCard : e
-              );
+              const newCards = cards.map((e) => (e._id === newCard._id ? newCard : e));
               setCards(filteredCards(newCards, currentUser._id));
-              setFavorites((state) =>
-                 state.filter((f) => f._id !== newCard._id)
-              );
+              setFavorites((state) => state.filter((f) => f._id !== newCard._id));
            })
          : // Если не отлайкан, значит действие было совершено для добавления лайка.
            api.addLike(product._id).then((newCard) => {
-              const newCards = cards.map((e) =>
-                 e._id === newCard._id ? newCard : e
-              );
+              const newCards = cards.map((e) => (e._id === newCard._id ? newCard : e));
               setCards(filteredCards(newCards, currentUser._id));
               setFavorites((favor) => [...favor, newCard]);
            });
@@ -76,21 +72,19 @@ function App() {
 
    // Первоначальная загрузка карточек/продуктов/постов/сущностей и данных юзера
    useEffect(() => {
-      Promise.all([api.getUserInfo(), api.getProductList()]).then(
-         ([userData, productData]) => {
-            // сеттим юзера
-            setCurrentUser(userData);
-            const items = filteredCards(productData.products, userData._id);
-            // сеттим карточки
-            setCards(items);
+      Promise.all([api.getUserInfo(), api.getProductList()]).then(([userData, productData]) => {
+         // сеттим юзера
+         setCurrentUser(userData);
+         const items = filteredCards(productData.products, userData._id);
+         // сеттим карточки
+         setCards(items);
 
-            // получаем отлайканные нами карточки
-            const fav = items.filter((e) => findLike(e, userData));
-            // сеттим карточки в избранный стейт
-            setFavorites(fav);
-         }
-      );
-   }, []);
+         // получаем отлайканные нами карточки
+         const fav = items.filter((e) => findLike(e, userData));
+         // сеттим карточки в избранный стейт
+         setFavorites(fav);
+      });
+   }, [isAuth]);
 
    const setSortCards = (sort) => {
       console.log(sort);
@@ -107,9 +101,7 @@ function App() {
          setCards([...newCards]);
       }
       if (sort === 'Новинки') {
-         const newCards = cards.sort(
-            (a, b) => new Date(a.created_at) - new Date(b.created_at)
-         );
+         const newCards = cards.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
          setCards([...newCards]);
       }
       if (sort === 'По скидке') {
@@ -121,10 +113,12 @@ function App() {
    const contextValue = {
       setSort: setSortCards,
       currentUser,
+      setCurrentUser,
       searchQuery,
       setSearchQuery,
       basketCounter,
       setBasketCounter,
+      isAuth,
    };
    const contextCardValue = {
       cards: cards,
@@ -133,62 +127,78 @@ function App() {
       setFavorites,
       setBasketCounter,
    };
+   const navigate = useNavigate();
 
-   // const sendData = async (data) => {
-   //    const res = await api.registerUser({ ...data, group: 'group-10' });
-   //    console.log(res);
-   // };
+   useEffect(() => {
+      const token = localStorage.getItem('token');
+      // const authPath = ['/reset-password', '/register']
+
+      const uncodedToken = parseJwt(token);
+      if (uncodedToken?._id) {
+         setIsAuth(true);
+      }
+      // else if (!authPath.includes(location.pathname)) {
+      //   navigate('/login');
+      //}
+   }, [navigate]);
+
+   const authRoutes = (
+      <>
+         <Route
+            path="login"
+            element={
+               <Modal modal={modal} setModal={setModal}>
+                  <Login setModal={setModal} />
+               </Modal>
+            }
+         ></Route>
+         <Route
+            path="register"
+            element={
+               <Modal modal={modal} setModal={setModal}>
+                  <Register setModal={setModal} />
+               </Modal>
+            }
+         ></Route>
+         <Route
+            path="remove-password"
+            element={
+               <Modal modal={modal} setModal={setModal}>
+                  <RemovePassword setModal={setModal} />
+               </Modal>
+            }
+         ></Route>
+      </>
+   );
 
    return (
       <>
          <UserContext.Provider value={contextValue}>
             <CardContext.Provider value={contextCardValue}>
                <Header setModal={setModal} />
-               <Routes>
-                  <Route path="/" element={<MainPage />}></Route>
-               </Routes>
-               <main className="content container">
-                  {/* <button className="btn" onClick={() => setModal(true)}>
-                     Show modal
-                  </button> */}
-                  {/* <Modal modal={modal} setModal={setModal}>
-                     <RegistrationForm sendData={sendData} />
-                  </Modal> */}
-                  <Routes>
-                     <Route path="/catalog" element={<CatalogPage />}></Route>
-                     <Route
-                        path="/product/:productId"
-                        element={<ProductPage />}
-                     ></Route>
-                     <Route path="faq" element={<FaqPage />}></Route>
-                     <Route path="/favorites" element={<Favorites />}></Route>
-                     <Route
-                        path="login"
-                        element={
-                           <Modal modal={modal} setModal={setModal}>
-                              <Login setModal={setModal} />
-                           </Modal>
-                        }
-                     ></Route>
-                     <Route
-                        path="register"
-                        element={
-                           <Modal modal={modal} setModal={setModal}>
-                              <Register setModal={setModal} />
-                           </Modal>
-                        }
-                     ></Route>
-                     <Route
-                        path="removepassword"
-                        element={
-                           <Modal modal={modal} setModal={setModal}>
-                              <RemovePassword setModal={setModal} />
-                           </Modal>
-                        }
-                     ></Route>
-                     {/* <Route path="*" element={<NotFound />}></Route> */}
-                  </Routes>
-               </main>
+               {isAuth ? (
+                  <main className="content container">
+                     <Routes>
+                        <Route path="/" element={<MainPage />}></Route>
+                        <Route path="/catalog" element={<CatalogPage />}></Route>
+                        <Route path="/product/:productId" element={<ProductPage />}></Route>
+                        <Route path="faq" element={<FaqPage />}></Route>
+                        <Route path="/favorites" element={<Favorites />}></Route>
+                        <Route path="/profile" element={<Profile />}></Route>
+                        <Route path="/edit-account" element={<EditAccount />}></Route>
+
+                        {authRoutes}
+
+                        <Route path="*" element={<NotFound />}></Route>
+                     </Routes>
+                  </main>
+               ) : (
+                  <div className="not-auth">
+                     Пожалуйста, авторизуйтесь.
+                     <Routes>{authRoutes}</Routes>
+                  </div>
+               )}
+
                <Footer />
             </CardContext.Provider>
          </UserContext.Provider>

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 
 export const Header = ({ setModal }) => {
-   const { basketCounter } = useContext(UserContext);
+   const { basketCounter, currentUser } = useContext(UserContext);
    const [counter, setCounter] = useState(basketCounter);
 
    useEffect(() => {

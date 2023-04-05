@@ -26,7 +26,7 @@ export const Footer = () => {
                <div className="contact-hero__item">
                   <div className="footer__title">
                      <div className="footer__title-text">
-                        <a href="/">Каталог</a>
+                        <Link to="/catalog">Каталог</Link>
                      </div>
                      <div className="footer__title-text">
                         <a href="/">Акции</a>

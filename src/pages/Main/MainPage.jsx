@@ -9,7 +9,7 @@ export const MainPage = () => {
    };
    return (
       <>
-         <div className="main-page">
+         <div className="main-page ">
             <div className="container">
                <div className="main-page__item">
                   <h1 className="main-page__h1">

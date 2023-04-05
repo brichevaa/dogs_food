@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { authApi } from '../../../utils/authApi';
 import { pattern } from '../../../utils/validations';
 import { BaseButton } from '../../BaseButton/BaseButton';
 import { Form } from '../../Form/Form';
@@ -20,9 +21,12 @@ export const Register = ({ setModal }) => {
    };
 
    const sendData = async (data) => {
-      //TODO add group to request
-      console.log(data);
-      // const res = await api.registerUser({ ...data, group: 'group-10' });
+      try {
+         const res = await authApi.registerUser({ ...data, group: 'group-10' });
+         navigate('/login');
+      } catch (error) {
+         alert(error);
+      }
    };
    const emailRegister = register('email', {
       required: 'Это обязательное поле',

@@ -6,6 +6,8 @@
    border: 1px solid #cfd8dc;
    font-size: 16px;
    line-height: 20px;
+   font-family: Nunito;
+   max-height: 3rem;
    /* color: #7b8e98; */
 }
 .auth__input:hover,

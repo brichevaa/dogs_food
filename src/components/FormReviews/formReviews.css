@@ -1,0 +1,11 @@
+.form__reviews {
+   display: flex;
+   flex-direction: column;
+   gap: 1.5rem;
+   width: 100%;
+   font-size: 28px;
+   line-height: 32px;
+   font-weight: 800;
+   resize: none;
+   /* padding: 40px 32px 32px 32px; */
+}
