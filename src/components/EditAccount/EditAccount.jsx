@@ -1,12 +1,13 @@
 import { useContext } from 'react';
 import './index.css';
-import { UserContext } from '../../context/userContext';
 import { Back } from '../Back/Back';
 import { BaseButton } from '../BaseButton/BaseButton';
 import { Form } from '../Form/Form';
 import { useForm } from 'react-hook-form';
 import { api } from '../../utils/api';
 import { openNotification } from '../Notification/Notification';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeUser } from '../../storageToolkit/user/userSlice';
 
 export const EditAccount = () => {
    const {
@@ -15,30 +16,15 @@ export const EditAccount = () => {
       formState: { errors },
    } = useForm({ mode: 'onSubmit' });
 
-   const { currentUser, setCurrentUser } = useContext(UserContext);
+   const dispatch = useDispatch();
+   const currentUser = useSelector((state) => state.user.data);
 
    const sendProfileData = async (data) => {
-      console.log(data);
-      try {
-         const changedUser = await api.changeUserInfo({ name: data.name, about: data.about });
-         console.log({ changedUser });
-         setCurrentUser({ ...changedUser });
-         openNotification('success', 'Успешно', 'Данные успешно изменены');
-      } catch (error) {
-         openNotification('error', 'Ошибка!', 'Не удалось изменить данные');
-      }
+      await dispatch(changeUser({ name: data.name, about: data.about }));
    };
 
    const changeAvatar = async (data) => {
-      console.log(data);
-      try {
-         const changedAvatar = await api.changeAvatar({ avatar: data.avatar });
-         console.log(changedAvatar);
-         setCurrentUser({ ...changedAvatar });
-         openNotification('success', 'Успешно', 'Аватар успешно изменен');
-      } catch (error) {
-         openNotification('error', 'Ошибка!', 'Не удалось изменить аватар');
-      }
+      await dispatch(changeUser({ avatar: data.avatar }));
    };
 
    const required = {

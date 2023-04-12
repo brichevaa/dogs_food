@@ -3,23 +3,20 @@ import truck from './img/truck.svg';
 import quality from './img/quality.svg';
 import cn from 'classnames';
 import { ReactComponent as Save } from './img/save.svg';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../../utils/api';
-import { UserContext } from '../../context/userContext';
 import { findLike } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { Rate } from '../Rate/Rate';
-import { Form } from '../Form/Form';
 import { useForm } from 'react-hook-form';
 import { BaseButton } from '../BaseButton/BaseButton';
 import { FormReviews } from '../FormReviews/FormReviews';
 import { ReactComponent as Basket } from './img/basket.svg';
 import { openNotification } from '../Notification/Notification';
 import { Back } from '../Back/Back';
+import { useSelector } from 'react-redux';
 
-// const product_id = '63ecf77059b98b038f77b65f';
-
-export const Product = ({ id, product, onSendReview, currentUser, onDeleteReview }) => {
+export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
    const [rating, setRating] = useState(3);
    const [currentRating, setCurrentRating] = useState(0);
    const [reviewsProduct, setReviewsProduct] = useState(product.reviews.slice(0, 3) ?? []);
@@ -33,7 +30,7 @@ export const Product = ({ id, product, onSendReview, currentUser, onDeleteReview
       reset,
    } = useForm({ mode: 'onSubmit' });
 
-   // console.log(product.reviews);
+   const currentUser = useSelector((state) => state.user.data);
 
    const sendReview = async (data) => {
       try {
@@ -63,7 +60,6 @@ export const Product = ({ id, product, onSendReview, currentUser, onDeleteReview
    };
 
    const isLiked = () => {
-      // console.log(product, currentUser);
       return findLike(product, currentUser);
    };
    const navigate = useNavigate();

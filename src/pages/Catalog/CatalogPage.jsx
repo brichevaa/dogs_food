@@ -10,14 +10,7 @@ export const CatalogPage = () => {
    const { cards } = useContext(CardContext);
    const { searchQuery, setSort } = useContext(UserContext);
 
-   const sortItems = [
-      { id: 'Новинки' },
-      { id: 'Популярные' },
-      { id: 'Сначала дешёвые' },
-      { id: 'Сначала дорогие' },
-      { id: 'По рейтингу' },
-      { id: 'По скидке' },
-   ];
+   const sortItems = [{ id: 'Новинки' }, { id: 'Популярные' }, { id: 'Сначала дешёвые' }, { id: 'Сначала дорогие' }, { id: 'По рейтингу' }, { id: 'По скидке' }];
 
    return (
       <>
@@ -30,11 +23,7 @@ export const CatalogPage = () => {
          {/* {!cards.length && <NotFound />} */}
          <div className="sort-cards">
             {sortItems.map((e) => (
-               <span
-                  key={e.id}
-                  className="sort-item"
-                  onClick={() => setSort(e.id)}
-               >
+               <span key={e.id} className="sort-item" onClick={() => setSort(e.id)}>
                   {e.id}
                </span>
             ))}

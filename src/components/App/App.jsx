@@ -23,15 +23,20 @@ import { RemovePassword } from '../Auth/RemovePassword/RemovePassword';
 import { parseJwt } from '../../utils/parseJWT';
 import { Profile } from '../Profile/Profile';
 import { EditAccount } from '../EditAccount/EditAccount';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser } from '../../storageToolkit/user/userSlice';
+import { fetchProducts } from '../../storageToolkit/products/productsSlice';
 
 function App() {
    const [cards, setCards] = useState([]);
    const [searchQuery, setSearchQuery] = useState(undefined);
-   const [currentUser, setCurrentUser] = useState({});
    const [favorites, setFavorites] = useState([]);
    const [basketCounter, setBasketCounter] = useState(0);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
+
+   const dispatch = useDispatch();
+   const currentUser = useSelector((state) => state.user.data);
 
    const filteredCards = (products, id) => {
       return products;
@@ -72,19 +77,22 @@ function App() {
 
    // Первоначальная загрузка карточек/продуктов/постов/сущностей и данных юзера
    useEffect(() => {
-      Promise.all([api.getUserInfo(), api.getProductList()]).then(([userData, productData]) => {
-         // сеттим юзера
-         setCurrentUser(userData);
-         const items = filteredCards(productData.products, userData._id);
+      if (!isAuth) return;
+      Promise.all([api.getProductList()]).then(([productData]) => {
+         const items = filteredCards(productData.products, currentUser?._id);
          // сеттим карточки
          setCards(items);
 
          // получаем отлайканные нами карточки
-         const fav = items.filter((e) => findLike(e, userData));
+         const fav = items.filter((e) => findLike(e, currentUser));
          // сеттим карточки в избранный стейт
          setFavorites(fav);
       });
-   }, [isAuth]);
+   }, [isAuth, currentUser]);
+
+   useEffect(() => {
+      dispatch(fetchUser()).then(() => dispatch(fetchProducts()));
+   }, [dispatch, isAuth]);
 
    const setSortCards = (sort) => {
       console.log(sort);
@@ -113,7 +121,6 @@ function App() {
    const contextValue = {
       setSort: setSortCards,
       currentUser,
-      setCurrentUser,
       searchQuery,
       setSearchQuery,
       basketCounter,
@@ -178,6 +185,7 @@ function App() {
                <Header setModal={setModal} />
                {isAuth ? (
                   <main className="content container">
+                     <Routes></Routes>
                      <Routes>
                         <Route path="/" element={<MainPage />}></Route>
                         <Route path="/catalog" element={<CatalogPage />}></Route>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export const getIssues = (number) => {
    if (number === 1) return ' товар';
@@ -8,6 +9,7 @@ export const getIssues = (number) => {
 
 export const useDebounce = (value, delay) => {
    const [debounceValue, setDebounceValue] = useState(value);
+   const currentUser = useSelector(({ user }) => user.data);
 
    useEffect(() => {
       const timeout = setTimeout(() => {
@@ -20,5 +22,4 @@ export const useDebounce = (value, delay) => {
    return debounceValue;
 };
 
-export const findLike = (product, currentUser) =>
-   product?.likes?.some((el) => el === currentUser._id);
+export const findLike = (product, currentUser) => product?.likes?.some((el) => el === currentUser._id);

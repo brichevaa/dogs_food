@@ -6,6 +6,9 @@
    grid-template-columns: 1fr 1fr;
    gap: 12px;
 }
+/* @media (max-width: 475px) {
+   grid-template-columns: 1fr;
+} */
 .edit__form {
    padding: 0px 0px;
 }

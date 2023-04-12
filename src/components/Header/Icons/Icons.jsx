@@ -30,6 +30,7 @@ export const Icons = ({ count, setModal }) => {
                <img src={logoDog} alt="лого собака" className="logo__icons" />
             </Link>
          )}
+         <span>Создать свой товар</span>
       </>
    );
 };

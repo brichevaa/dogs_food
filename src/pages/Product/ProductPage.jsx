@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Product } from '../../components/Product/Product';
 import { api } from '../../utils/api';
-import { UserContext } from '../../context/userContext';
+import { useSelector } from 'react-redux';
 
 export const ProductPage = () => {
    const id = useParams();
-   const { currentUser } = useContext(UserContext);
+   const currentUser = useSelector((state) => state.user.data);
 
    const [product, setProduct] = useState(null);
 
@@ -24,5 +24,5 @@ export const ProductPage = () => {
       api.getProductById(id?.productId).then((data) => setProduct(data));
    }, [id?.productId]);
 
-   return product && currentUser ? <Product id={id.productId} product={product} onSendReview={onSendReview} currentUser={currentUser} onDeleteReview={deleteReview} /> : <div>Loading</div>;
+   return product && currentUser ? <Product id={id.productId} product={product} onSendReview={onSendReview} onDeleteReview={deleteReview} /> : <div>Loading</div>;
 };
