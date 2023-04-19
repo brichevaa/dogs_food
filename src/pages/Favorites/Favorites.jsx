@@ -5,9 +5,11 @@ import { CardContext } from '../../context/cardContext';
 import { ReactComponent as Notfound } from '../NotFound/notfound.svg';
 import './favorites.css';
 import { Back } from '../../components/Back/Back';
+import { useSelector } from 'react-redux';
 
 export const Favorites = () => {
-   const { favorites } = useContext(CardContext);
+   const { favorites } = useSelector((state) => state.products);
+
    const navigate = useNavigate();
 
    return (

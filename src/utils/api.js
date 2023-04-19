@@ -26,8 +26,8 @@ class Api {
       this._headers = data.headers;
       this._newHeaders = data.newHeaders;
    }
-   getProductList(page = 1) {
-      return fetch(`${this._baseUrl}/products?page=${page}`, {
+   getProductList(page, limit) {
+      return fetch(`${this._baseUrl}/products?page=${page}&limit=${limit}`, {
          ...this._newHeaders(),
       }).then((res) => onResponse(res));
    }
@@ -41,6 +41,12 @@ class Api {
          ...this._newHeaders(),
          method: 'POST',
          body: JSON.stringify(data),
+      }).then((res) => onResponse(res));
+   }
+   deleteProductById(id) {
+      return fetch(`${this._baseUrl}/products/${id}`, {
+         ...this._newHeaders(),
+         method: 'DELETE',
       }).then((res) => onResponse(res));
    }
    getUserInfo() {
@@ -75,10 +81,10 @@ class Api {
       }).then((res) => onResponse(res));
    }
    // like - true / false
-   changeLikeProductStatus(productId, like) {
+   changeLikeProductStatus(productId, wasLiked) {
       return fetch(`${this._baseUrl}/products/likes/${productId}`, {
          ...this._newHeaders(),
-         method: like ? 'PUT' : 'DELETE',
+         method: wasLiked ? 'DELETE' : 'PUT',
       }).then((res) => onResponse(res));
    }
 

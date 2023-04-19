@@ -3,13 +3,18 @@ import logoFavorite from './favorites.svg';
 import logoPath from './path.svg';
 import './icons.css';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CardContext } from '../../../context/cardContext';
 import { UserContext } from '../../../context/userContext';
+import { useSelector } from 'react-redux';
+import { Modal } from '../../Modal/Modal';
+import { CreateProduct } from '../../CreateProduct/CreateProduct';
+import { BaseButton } from '../../BaseButton/BaseButton';
 
-export const Icons = ({ count, setModal }) => {
+export const Icons = ({ count, setModal, modal }) => {
    const { isAuth } = useContext(UserContext);
-   const { favorites } = useContext(CardContext);
+   const { favorites } = useSelector((state) => state.products);
+   const [modalCreateProduct, setModalCreateProduct] = useState(false);
 
    return (
       <>
@@ -30,7 +35,12 @@ export const Icons = ({ count, setModal }) => {
                <img src={logoDog} alt="лого собака" className="logo__icons" />
             </Link>
          )}
-         <span>Создать свой товар</span>
+         <span onClick={() => setModalCreateProduct(true)} className="create-product__header">
+            Добавить продукт
+         </span>
+         <Modal modal={modalCreateProduct} setModal={setModalCreateProduct}>
+            {modalCreateProduct && <CreateProduct setModalCreateProduct={setModalCreateProduct} />}
+         </Modal>
       </>
    );
 };

@@ -19,3 +19,20 @@
    text-decoration: none;
    position: relative;
 }
+.create-product__header {
+   display: inline-block;
+   background-color: #ffe867;
+   box-shadow: 0 2px 4px rgba(97, 87, 62, 0.04), 0 8px 16px rgba(116, 100, 88, 0.16);
+
+   padding: 10px;
+   border-radius: 10px;
+   text-align: right;
+   font-size: 16px;
+   cursor: pointer;
+   /* font-weight: 700; */
+   /* color: #4f4b44; */
+}
+.create-product__header:hover {
+   background-color: #ffaa0d;
+   color: #f44336;
+}

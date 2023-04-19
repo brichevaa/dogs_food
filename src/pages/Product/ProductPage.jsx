@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Product } from '../../components/Product/Product';
 import { api } from '../../utils/api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { findLike } from '../../utils/utils';
+import { fetchChangeLikeProduct } from '../../storageToolkit/products/productsSlice';
 
 export const ProductPage = () => {
    const id = useParams();
@@ -10,6 +12,20 @@ export const ProductPage = () => {
 
    const [product, setProduct] = useState(null);
 
+   const dispatch = useDispatch();
+
+   const onProductLike = () => {
+      // const wasLiked = handleProductLike(product);
+      const wasLiked = findLike(product, currentUser);
+      dispatch(fetchChangeLikeProduct(product));
+      if (wasLiked) {
+         const filteredLikes = product.likes.filter((e) => e !== currentUser._id);
+         setProduct({ ...product, likes: filteredLikes });
+      } else {
+         const addedLikes = [...product.likes, currentUser._id];
+         setProduct({ ...product, likes: addedLikes });
+      }
+   };
    const onSendReview = (newProduct) => {
       setProduct(() => ({ ...newProduct }));
    };
@@ -24,5 +40,15 @@ export const ProductPage = () => {
       api.getProductById(id?.productId).then((data) => setProduct(data));
    }, [id?.productId]);
 
-   return product && currentUser ? <Product id={id.productId} product={product} onSendReview={onSendReview} onDeleteReview={deleteReview} /> : <div>Loading</div>;
+   return product && currentUser ? (
+      <Product
+         id={id.productId}
+         product={product}
+         onSendReview={onSendReview}
+         onDeleteReview={deleteReview}
+         onProductLike={onProductLike}
+      />
+   ) : (
+      <div>Loading</div>
+   );
 };

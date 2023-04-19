@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 import './App.css';
-import { api } from '../../utils/api';
-import { findLike, useDebounce } from '../../utils/utils';
+import { useDebounce } from '../../utils/utils';
 
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { CatalogPage } from '../../pages/Catalog/CatalogPage';
@@ -25,101 +24,41 @@ import { Profile } from '../Profile/Profile';
 import { EditAccount } from '../EditAccount/EditAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../storageToolkit/user/userSlice';
-import { fetchProducts } from '../../storageToolkit/products/productsSlice';
+import { fetchProducts, fetchSearchProducts } from '../../storageToolkit/products/productsSlice';
 
 function App() {
    const [cards, setCards] = useState([]);
    const [searchQuery, setSearchQuery] = useState(undefined);
-   const [favorites, setFavorites] = useState([]);
    const [basketCounter, setBasketCounter] = useState(0);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
 
-   const dispatch = useDispatch();
-   const currentUser = useSelector((state) => state.user.data);
-
-   const filteredCards = (products, id) => {
-      return products;
-      // return products.filter((e) => e.author._id === id);
-   };
+   const dispatch = useDispatch(); // dispatch - передает данные
+   const currentUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
+   const { data: products, favorites } = useSelector((state) => state.products);
 
    const handleSearch = (search) => {
-      api.searchProducts(search).then((data) => setCards(filteredCards(data, currentUser._id)));
+      dispatch(fetchSearchProducts(search));
+      // api.searchProducts(search).then((data) => setCards(filteredCards(data, currentUser._id)));
    };
 
-   // console.log({ currentUser });
-
    const debounceValueInApp = useDebounce(searchQuery, 500);
-
-   function handleProductLike(product) {
-      // понимаем , отлайкан ли продукт
-      const isLiked = findLike(product, currentUser);
-      isLiked
-         ? // Если товар был с лайком, значит было действие по удалению лайка
-           api.deleteLike(product._id).then((newCard) => {
-              // newCard - карточка с уже изменненым количеством лайков
-              const newCards = cards.map((e) => (e._id === newCard._id ? newCard : e));
-              setCards(filteredCards(newCards, currentUser._id));
-              setFavorites((state) => state.filter((f) => f._id !== newCard._id));
-           })
-         : // Если не отлайкан, значит действие было совершено для добавления лайка.
-           api.addLike(product._id).then((newCard) => {
-              const newCards = cards.map((e) => (e._id === newCard._id ? newCard : e));
-              setCards(filteredCards(newCards, currentUser._id));
-              setFavorites((favor) => [...favor, newCard]);
-           });
-   }
 
    useEffect(() => {
       if (debounceValueInApp === undefined) return;
       handleSearch(debounceValueInApp);
    }, [debounceValueInApp]);
 
-   // Первоначальная загрузка карточек/продуктов/постов/сущностей и данных юзера
    useEffect(() => {
       if (!isAuth) return;
-      Promise.all([api.getProductList()]).then(([productData]) => {
-         const items = filteredCards(productData.products, currentUser?._id);
-         // сеттим карточки
-         setCards(items);
-
-         // получаем отлайканные нами карточки
-         const fav = items.filter((e) => findLike(e, currentUser));
-         // сеттим карточки в избранный стейт
-         setFavorites(fav);
-      });
-   }, [isAuth, currentUser]);
-
-   useEffect(() => {
       dispatch(fetchUser()).then(() => dispatch(fetchProducts()));
    }, [dispatch, isAuth]);
 
-   const setSortCards = (sort) => {
-      console.log(sort);
-      if (sort === 'Сначала дешёвые') {
-         const newCards = cards.sort((a, b) => a.price - b.price);
-         setCards([...newCards]);
-      }
-      if (sort === 'Сначала дорогие') {
-         const newCards = cards.sort((a, b) => b.price - a.price);
-         setCards([...newCards]);
-      }
-      if (sort === 'Популярные') {
-         const newCards = cards.sort((a, b) => b.likes.length - a.likes.length);
-         setCards([...newCards]);
-      }
-      if (sort === 'Новинки') {
-         const newCards = cards.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-         setCards([...newCards]);
-      }
-      if (sort === 'По скидке') {
-         const newCards = cards.sort((a, b) => b.discount - a.discount);
-         setCards([...newCards]);
-      }
-   };
+   useEffect(() => {
+      setCards(products);
+   }, [products, favorites]);
 
    const contextValue = {
-      setSort: setSortCards,
       currentUser,
       searchQuery,
       setSearchQuery,
@@ -129,9 +68,8 @@ function App() {
    };
    const contextCardValue = {
       cards: cards,
-      handleProductLike,
+      setCards,
       favorites,
-      setFavorites,
       setBasketCounter,
    };
    const navigate = useNavigate();
@@ -182,7 +120,7 @@ function App() {
       <>
          <UserContext.Provider value={contextValue}>
             <CardContext.Provider value={contextCardValue}>
-               <Header setModal={setModal} />
+               <Header setModal={setModal} modal={modal} />
                {isAuth ? (
                   <main className="content container">
                      <Routes></Routes>

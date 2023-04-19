@@ -8,7 +8,9 @@ const store = configureStore({
       user: userSlice,
       products: productsSlice,
    },
-   middleware: (getDefaultMiddleware) =>
+   middleware: (
+      getDefaultMiddleware // middleware- прослойка для асинхронных взаимодействий (помогает toolkit'у увидеть асинхронные действия)
+   ) =>
       getDefaultMiddleware({
          thunk: {
             extraArgument: api,

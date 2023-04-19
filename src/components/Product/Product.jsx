@@ -16,7 +16,7 @@ import { openNotification } from '../Notification/Notification';
 import { Back } from '../Back/Back';
 import { useSelector } from 'react-redux';
 
-export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
+export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLike }) => {
    const [rating, setRating] = useState(3);
    const [currentRating, setCurrentRating] = useState(0);
    const [reviewsProduct, setReviewsProduct] = useState(product.reviews.slice(0, 3) ?? []);
@@ -59,10 +59,14 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
       setReviewsProduct([...product.reviews]);
    };
 
-   const isLiked = () => {
-      return findLike(product, currentUser);
-   };
    const navigate = useNavigate();
+
+   const [isLikedProduct, setIsLikedProduct] = useState(false);
+
+   useEffect(() => {
+      const isLiked = product?.likes?.some((el) => el === currentUser._id);
+      setIsLikedProduct(isLiked);
+   }, [product.likes]);
 
    useEffect(() => {
       api.getUsers().then((data) => setUsers(data));
@@ -74,7 +78,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
       const user = users.find((e) => e._id === id);
       // console.log(user);
       if (user?.avatar.includes('default-image')) {
-         return { ...user, avatar: 'https://avatars.mds.yandex.net/i?id=e67c20f98bdc512c5d3bc20c140f8fac-5719595-images-taas-consumers&n=27&h=480&w=480' };
+         return {
+            ...user,
+            avatar:
+               'https://avatars.mds.yandex.net/i?id=e67c20f98bdc512c5d3bc20c140f8fac-5719595-images-taas-consumers&n=27&h=480&w=480',
+         };
       }
 
       return user;
@@ -90,6 +98,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
    }, [product?.reviews]);
 
    // console.log(currentRating);
+
+   const onLike = () => {
+      onProductLike(product);
+      // setIsLikedProduct((state) => !state);
+   };
 
    const options = {
       day: 'numeric',
@@ -125,7 +138,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
             </div>
             <div className={s.desc}>
                <span className={s.price}>{product.price}&nbsp;₽</span>
-               {!!product.discount && <span className={`${s.price} card__price_type_discount`}>{product.discount}&nbsp;%</span>}
+               {!!product.discount && (
+                  <span className={`${s.price} card__price_type_discount`}>
+                     {product.discount}&nbsp;%
+                  </span>
+               )}
                <div className={s.btnWrap}>
                   <div className={s.left}>
                      <button className={s.minus}>-</button>
@@ -136,9 +153,12 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
                      В корзину
                   </a>
                </div>
-               <button className={cn(s.favorite, { [s.favoriteActive]: isLiked() })}>
+               <button
+                  className={cn(s.favorite, { [s.favoriteActive]: isLikedProduct })}
+                  onClick={(e) => onLike(e)}
+               >
                   <Save />
-                  <span>{isLiked() ? 'В избранном' : 'В избранное'}</span>
+                  <span>{isLikedProduct ? 'В избранном' : 'В избранное'}</span>
                </button>
                <div className={s.delivery}>
                   <img src={truck} alt="truck" />
@@ -173,12 +193,15 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
                <div className={s.naming}>Польза</div>
                <div className={s.description}>
                   <p>
-                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem quas sapiente molestiae consequuntur doloremque nisi ullam quos ut nulla, ipsum veniam, quo voluptatem. Pariatur
-                     ullam animi omnis eius laborum dolorum!
+                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem quas sapiente
+                     molestiae consequuntur doloremque nisi ullam quos ut nulla, ipsum veniam, quo
+                     voluptatem. Pariatur ullam animi omnis eius laborum dolorum!
                   </p>
                   <p>
-                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem nobis est, distinctio error cupiditate, nostrum mollitia blanditiis repudiandae quia alias eligendi cum
-                     aperiam unde voluptatibus accusantium magni pariatur nemo expedita!
+                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem nobis
+                     est, distinctio error cupiditate, nostrum mollitia blanditiis repudiandae quia
+                     alias eligendi cum aperiam unde voluptatibus accusantium magni pariatur nemo
+                     expedita!
                   </p>
                </div>
             </div>
@@ -195,7 +218,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
                <FormReviews submitForm={handleSubmit(sendReview)} className={s.review__submit}>
                   {/* <span className={s.naming}>Оставьте ваш отзыв ниже в специальном поле</span> */}
                   <Rate rating={rating} setRating={setRating} isEdit={true} />
-                  <textarea {...textRegister} className={s.textarea} placeholder="Оставьте ваш отзыв" />
+                  <textarea
+                     {...textRegister}
+                     className={s.textarea}
+                     placeholder="Оставьте ваш отзыв"
+                  />
                   <BaseButton type="submit" color="yellow" style={{ width: '200px' }}>
                      Отправить отзыв
                   </BaseButton>
@@ -210,15 +237,26 @@ export const Product = ({ id, product, onSendReview, onDeleteReview }) => {
                      <div key={r._id} className={s.reviews}>
                         <div className={s.reviews__author}>
                            <div className={s.reviews__info}>
-                              <img src={getUser(r.author)?.avatar} alt="avatar" className={s.reviews__avatar} />
+                              <img
+                                 src={getUser(r.author)?.avatar}
+                                 alt="avatar"
+                                 className={s.reviews__avatar}
+                              />
                               <span>{`${getUser(r.author)?.name ?? 'User'} `}</span>
-                              <span className={s.reviews__date}>{new Date(r.created_at).toLocaleString('ru', options)}</span>
+                              <span className={s.reviews__date}>
+                                 {new Date(r.created_at).toLocaleString('ru', options)}
+                              </span>
                            </div>
                            <Rate rating={r.rating} isEdit={false} />
                         </div>
                         <div className={s.reviews__text}>
                            <span>{r.text}</span>
-                           {currentUser._id === r.author && <Basket onClick={() => deleteReview(r._id)} className={s.basketIcon} />}
+                           {currentUser._id === r.author && (
+                              <Basket
+                                 onClick={() => deleteReview(r._id)}
+                                 className={s.basketIcon}
+                              />
+                           )}
                         </div>
                      </div>
                   ))}

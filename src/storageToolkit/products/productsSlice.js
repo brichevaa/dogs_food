@@ -1,14 +1,69 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchUser } from '../user/userSlice';
+import { findLike } from '../../utils/utils';
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api }) {
-   try {
-      const products = await api.getProductList();
-      return fulfillWithValue(products);
-   } catch (error) {
-      rejectWithValue(error);
+export const fetchProducts = createAsyncThunk(
+   'products/fetchProducts',
+   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+      try {
+         const { user } = getState();
+         const products = await api.getProductList();
+         return fulfillWithValue({ ...products, user: user.data });
+      } catch (error) {
+         rejectWithValue(error);
+      }
    }
-});
+);
+
+export const fetchAddProducts = createAsyncThunk(
+   'products/fetchAddProducts',
+   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+      try {
+         const products = await api.addProduct(dataOutside);
+         return fulfillWithValue(products);
+      } catch (error) {
+         rejectWithValue(error);
+      }
+   }
+);
+
+export const fetchDeleteProducts = createAsyncThunk(
+   'products/fetchDeleteProducts',
+   async function (id, { fulfillWithValue, rejectWithValue, extra: api }) {
+      try {
+         const products = await api.deleteProductById(id);
+         return fulfillWithValue(products);
+      } catch (error) {
+         rejectWithValue(error);
+      }
+   }
+);
+
+export const fetchSearchProducts = createAsyncThunk(
+   'products/fetchSearchProducts',
+   async function (search, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+      try {
+         const products = await api.searchProducts(search);
+         return fulfillWithValue(products);
+      } catch (error) {
+         rejectWithValue(error);
+      }
+   }
+);
+
+export const fetchChangeLikeProduct = createAsyncThunk(
+   'products/fetchChangeLikeProduct',
+   async function (product, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+      try {
+         const { user } = getState();
+         const wasLiked = findLike(product, user.data);
+         const data = await api.changeLikeProductStatus(product._id, wasLiked);
+         return fulfillWithValue({ product: data, wasLiked: wasLiked });
+      } catch (error) {
+         rejectWithValue(error);
+      }
+   }
+);
 
 const initialState = {
    data: [],
@@ -21,17 +76,65 @@ const initialState = {
 const productsSlice = createSlice({
    name: 'products',
    initialState: initialState,
-   reducers: {},
+   reducers: {
+      sortedProducts: (state, action) => {
+         switch (action.payload) {
+            case 'Сначала дешёвые':
+               state.data = state.data.sort((a, b) => a.price - b.price);
+               break;
+            case 'Сначала дорогие':
+               state.data = state.data.sort((a, b) => b.price - a.price);
+               break;
+            case 'Популярные':
+               state.data = state.data.sort((a, b) => b.likes.length - a.likes.length);
+               break;
+            case 'Новинки':
+               state.data = state.data.sort(
+                  (a, b) => new Date(b.created_at) - new Date(a.created_at)
+               );
+               break;
+            default:
+               state.data = state.data.sort((a, b) => b.discount - a.discount);
+               break;
+         }
+      },
+   },
    extraReducers: (builder) => {
       builder.addCase(fetchProducts.pending, (state) => {
          state.loading = true;
          state.error = null;
       });
       builder.addCase(fetchProducts.fulfilled, (state, action) => {
+         const { total, products, user } = action.payload;
+         state.data = products;
+         state.total = total;
+         state.favorites = products.filter((e) => findLike(e, user));
+         state.loading = false;
+      });
+      builder.addCase(fetchChangeLikeProduct.fulfilled, (state, action) => {
+         state.loading = false;
+         state.error = null;
+         const { product, wasLiked } = action.payload;
+         state.data = state.data.map((e) => {
+            return e._id === product._id ? product : e;
+         });
+         if (!wasLiked) {
+            state.favorites.push(product);
+         } else {
+            state.favorites = state.favorites.filter((e) => e._id !== product._id);
+         }
+      });
+      builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
+         state.data = action.payload;
+         state.loading = false;
+      });
+      builder.addCase(fetchAddProducts.fulfilled, (state, action) => {
          state.data = action.payload;
          state.loading = false;
       });
    },
 });
+
+export const { sortedProducts } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -5,7 +5,7 @@ import { Icons } from './Icons/Icons';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/userContext';
 
-export const Header = ({ setModal }) => {
+export const Header = ({ setModal, modal }) => {
    const { basketCounter } = useContext(UserContext);
    const [counter, setCounter] = useState(basketCounter);
 
@@ -26,7 +26,7 @@ export const Header = ({ setModal }) => {
                   <Search />
 
                   <div className="header__right">
-                     <Icons count={counter} setModal={setModal} />
+                     <Icons count={counter} setModal={setModal} modal={modal} />
                   </div>
                </div>
             </div>
