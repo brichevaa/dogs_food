@@ -22,7 +22,6 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
    const [reviewsProduct, setReviewsProduct] = useState(product.reviews.slice(0, 3) ?? []);
    const [users, setUsers] = useState([]);
    const [showForm, setShowForm] = useState(false);
-   const [reviews, setReviews] = useState();
    const {
       register,
       handleSubmit,

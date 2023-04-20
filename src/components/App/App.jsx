@@ -123,7 +123,6 @@ function App() {
                <Header setModal={setModal} modal={modal} />
                {isAuth ? (
                   <main className="content container">
-                     <Routes></Routes>
                      <Routes>
                         <Route path="/" element={<MainPage />}></Route>
                         <Route path="/catalog" element={<CatalogPage />}></Route>
