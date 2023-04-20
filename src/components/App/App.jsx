@@ -131,10 +131,9 @@ function App() {
                         <Route path="/favorites" element={<Favorites />}></Route>
                         <Route path="/profile" element={<Profile />}></Route>
                         <Route path="/edit-account" element={<EditAccount />}></Route>
+                        <Route path="*" element={<NotFound />}></Route>
 
                         {authRoutes}
-
-                        <Route path="*" element={<NotFound />}></Route>
                      </Routes>
                   </main>
                ) : (
