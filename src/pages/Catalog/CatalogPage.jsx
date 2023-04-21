@@ -13,7 +13,7 @@ export const CatalogPage = () => {
 
    return (
       <>
-         <SortedGoods />
+         {!searchQuery && <SortedGoods />}
          {searchQuery && (
             <div className="catalog-page">
                <p className="catalog-page__p">

@@ -11,20 +11,25 @@
 }
 .main-page__h1 {
    font-size: 48px;
-   font-weight: 900;
+   font-weight: 400;
    line-height: 52px;
 }
 .main-page__h2 {
    font-size: 22px;
-   font-weight: 300;
+   font-weight: 400;
    line-height: 86%;
    margin: 20px 0px 0px 0px;
    text-align: left;
 }
 .btn-main {
    font-size: 20px;
+   font-weight: normal;
    padding: 16px 28px 16px 28px;
    margin: 40px 0px 0px 0px;
    cursor: pointer;
-   background-color: #ffe44d;
+   background-color: #99c27c;
+   font-family: Montserrat;
+}
+.btn-main:hover {
+   background-color: #6f8f57;
 }

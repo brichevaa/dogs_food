@@ -10,6 +10,9 @@ import { useSelector } from 'react-redux';
 import { Modal } from '../../Modal/Modal';
 import { CreateProduct } from '../../CreateProduct/CreateProduct';
 import { BaseButton } from '../../BaseButton/BaseButton';
+import { UserOutlined } from '@ant-design/icons';
+import { HeartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
 export const Icons = ({ count, setModal, modal }) => {
    const { isAuth } = useContext(UserContext);
@@ -19,20 +22,24 @@ export const Icons = ({ count, setModal, modal }) => {
    return (
       <>
          <Link to={'/favorites'} className="header__bubble-link">
-            <img src={logoFavorite} alt="лого лайк" className="logo__icons" />
+            <HeartOutlined />
+            {/* <img src={logoFavorite} alt="лого лайк" className="logo__icons" /> */}
             {favorites.length !== 0 && <span className="header__bubble">{favorites.length}</span>}
          </Link>
          <Link to={'/cart'} className="header__bubble-link">
-            <img src={logoPath} alt="лого корзина" className="logo__icons" />
+            {/* <img src={logoPath} alt="лого корзина" className="logo__icons" /> */}
+            <ShoppingCartOutlined />
             {count !== 0 && <span className="header__bubble">{count}</span>}
          </Link>
          {isAuth ? (
             <Link to={'/profile'} onClick={() => setModal(true)}>
-               <img src={logoDog} alt="лого собака" className="logo__icons" />
+               {/* <img src={logoDog} alt="лого собака" className="logo__icons" /> */}
+               <UserOutlined className="logo__icons" />
             </Link>
          ) : (
             <Link to={'/login'} onClick={() => setModal(true)}>
-               <img src={logoDog} alt="лого собака" className="logo__icons" />
+               {/* <img src={logoDog} alt="лого собака" className="logo__icons" /> */}
+               <UserOutlined className="logo__icons" />
             </Link>
          )}
          <span onClick={() => setModalCreateProduct(true)} className="create-product__header">

@@ -5,6 +5,7 @@ import { Icons } from './Icons/Icons';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../context/userContext';
 import { ReactComponent as Flora } from './Logo/flora.svg';
+import { Link } from 'react-router-dom';
 
 export const Header = ({ setModal, modal }) => {
    const { basketCounter } = useContext(UserContext);
@@ -21,9 +22,17 @@ export const Header = ({ setModal, modal }) => {
          <div className="container">
             <div className="header__wrapper">
                <div className="header__item">
-                  <div className="header__logo">{/* <Logo /> */}</div>
+                  {/* <div className="header__logo">
+                     <Logo />
+                  </div> */}
+                  <Link to={'/'} className="flora">
+                     <Flora />
+                  </Link>
                   <Search />
-                  <Flora />
+                  <div className="header__items">
+                     <Link to={'/'}>Главная</Link>
+                     <Link to={'/catalog'}>Каталог</Link>
+                  </div>
                   <div className="header__right">
                      <Icons count={counter} setModal={setModal} modal={modal} />
                   </div>
