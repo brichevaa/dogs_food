@@ -15,7 +15,6 @@ export const ProductPage = () => {
    const dispatch = useDispatch();
 
    const onProductLike = () => {
-      // const wasLiked = handleProductLike(product);
       const wasLiked = findLike(product, currentUser);
       dispatch(fetchChangeLikeProduct(product));
       if (wasLiked) {

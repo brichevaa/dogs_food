@@ -7,7 +7,7 @@ export const CardList = ({ cards }) => {
    const { setBasketCounter } = useContext(CardContext);
 
    return (
-      <div className="cards ">
+      <div className="cards">
          {cards.map((item) => (
             <Card {...item} key={item._id} product={item} setBasketCounter={setBasketCounter} />
          ))}

@@ -25,6 +25,7 @@ import { EditAccount } from '../EditAccount/EditAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../storageToolkit/user/userSlice';
 import { fetchProducts, fetchSearchProducts } from '../../storageToolkit/products/productsSlice';
+import { Basket, Cart } from '../Basket/Basket';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -129,6 +130,7 @@ function App() {
                         <Route path="/product/:productId" element={<ProductPage />}></Route>
                         <Route path="faq" element={<FaqPage />}></Route>
                         <Route path="/favorites" element={<Favorites />}></Route>
+                        <Route path="/cart" element={<Basket />}></Route>
                         <Route path="/profile" element={<Profile />}></Route>
                         <Route path="/edit-account" element={<EditAccount />}></Route>
                         <Route path="*" element={<NotFound />}></Route>
