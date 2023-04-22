@@ -54,9 +54,9 @@ function App() {
       dispatch(fetchUser()).then(() => dispatch(fetchProducts()));
    }, [dispatch, isAuth]);
 
-   useEffect(() => {
-      setCards(products);
-   }, [products, favorites]);
+   // useEffect(() => {
+   //    setCards(filteredCards(products, currentUser._id));
+   // }, [products, favorites]);
 
    const contextValue = {
       currentUser,

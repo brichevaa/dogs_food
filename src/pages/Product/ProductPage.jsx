@@ -28,7 +28,6 @@ export const ProductPage = () => {
    };
    const onSendReview = (newProduct) => {
       setProduct(() => ({ ...newProduct }));
-      // setProduct(newProduct)
    };
    const deleteReview = async (id) => {
       const res = await api.deleteReview(product._id, id);

@@ -1,15 +1,10 @@
-import logoDog from './dog.svg';
-import logoFavorite from './favorites.svg';
-import logoPath from './path.svg';
 import './icons.css';
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
-import { CardContext } from '../../../context/cardContext';
 import { UserContext } from '../../../context/userContext';
 import { useSelector } from 'react-redux';
 import { Modal } from '../../Modal/Modal';
 import { CreateProduct } from '../../CreateProduct/CreateProduct';
-import { BaseButton } from '../../BaseButton/BaseButton';
 import { UserOutlined } from '@ant-design/icons';
 import { HeartOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';

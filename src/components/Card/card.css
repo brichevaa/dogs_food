@@ -29,6 +29,8 @@
    object-fit: contain;
    margin-bottom: 16px;
 }
+.card__body {
+}
 
 .card__old-price {
    font-size: 12px;
@@ -126,6 +128,7 @@
    text-decoration: none;
    display: inline-block;
    transition: background-color 0.3s;
+   cursor: pointer;
 }
 
 .btn_type_primary {
@@ -134,6 +137,9 @@
 .btn_type_primary:hover {
    background-color: #6f8f57;
    /* color: white; */
+}
+.btn_type_primary-active {
+   background-color: #dad5d1;
 }
 
 .tag {
@@ -163,4 +169,7 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
+}
+.card__basket {
+   cursor: pointer;
 }

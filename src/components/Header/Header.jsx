@@ -25,9 +25,10 @@ export const Header = ({ setModal, modal }) => {
                   {/* <div className="header__logo">
                      <Logo />
                   </div> */}
-                  <Link to={'/'} className="flora">
-                     <Flora />
+                  <Link to={'/'}>
+                     <Flora className="flora" />
                   </Link>
+
                   <Search />
                   <div className="header__items">
                      <Link to={'/'}>Главная</Link>

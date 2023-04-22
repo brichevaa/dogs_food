@@ -17,8 +17,8 @@ export const CatalogPage = () => {
          {searchQuery && (
             <div className="catalog-page">
                <p className="catalog-page__p">
-                  По запросу <b>{searchQuery}</b> найдено {products?.length}
-                  {getIssues(products?.length)}
+                  По запросу <b>{searchQuery}</b> найдено {products.length}
+                  {getIssues(products.length)}
                </p>
             </div>
          )}

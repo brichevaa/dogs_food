@@ -45,6 +45,7 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
    };
 
    const deleteReview = async (id) => {
+      console.log(id);
       try {
          const res = await onDeleteReview(id);
          setReviewsProduct(() => [...res.reviews]);
@@ -70,6 +71,7 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
    useEffect(() => {
       api.getUsers().then((data) => setUsers(data));
    }, []);
+   // console.log(users);
 
    const getUser = (id) => {
       // console.log(id);
@@ -188,7 +190,7 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                <div className={s.naming}>Вес</div>
                <div className={s.description}>{product.wight}</div>
                <div className={s.naming}>Цена</div>
-               <div className={s.description}>{product.price} ₽ за 100 грамм</div>
+               <div className={s.description}>{product.price} ₽</div>
                <div className={s.naming}>Польза</div>
                <div className={s.description}>
                   <p>
@@ -222,7 +224,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                      className={s.textarea}
                      placeholder="Оставьте ваш отзыв"
                   />
-                  <BaseButton type="submit" color="yellow" style={{ width: '200px' }}>
+                  <BaseButton
+                     type="submit"
+                     style={{ width: '200px' }}
+                     className="btn btn_type_primary"
+                  >
                      Отправить отзыв
                   </BaseButton>
                </FormReviews>
@@ -237,11 +243,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                         <div className={s.reviews__author}>
                            <div className={s.reviews__info}>
                               <img
-                                 src={getUser(r.author)?.avatar}
+                                 src={r.author.avatar}
                                  alt="avatar"
                                  className={s.reviews__avatar}
                               />
-                              <span>{`${getUser(r.author)?.name ?? 'User'} `}</span>
+                              <span>{r.author.name ?? 'User'}</span>
                               <span className={s.reviews__date}>
                                  {new Date(r.created_at).toLocaleString('ru', options)}
                               </span>
@@ -250,7 +256,7 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                         </div>
                         <div className={s.reviews__text}>
                            <span>{r.text}</span>
-                           {currentUser._id === r.author && (
+                           {currentUser._id === r.author._id && (
                               <Basket
                                  onClick={() => deleteReview(r._id)}
                                  className={s.basketIcon}

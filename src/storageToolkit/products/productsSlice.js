@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchUser } from '../user/userSlice';
-import { findLike } from '../../utils/utils';
+import { filteredCards, findLike } from '../../utils/utils';
 
 export const fetchProducts = createAsyncThunk(
    'products/fetchProducts',
@@ -17,10 +17,11 @@ export const fetchProducts = createAsyncThunk(
 
 export const fetchAddProducts = createAsyncThunk(
    'products/fetchAddProducts',
-   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api }) {
       try {
-         const products = await api.addProduct(dataOutside);
-         return fulfillWithValue(products);
+         const addedProduct = await api.addProduct({ ...dataOutside });
+         console.log(addedProduct);
+         return fulfillWithValue(addedProduct);
       } catch (error) {
          rejectWithValue(error);
       }
@@ -106,7 +107,7 @@ const productsSlice = createSlice({
       });
       builder.addCase(fetchProducts.fulfilled, (state, action) => {
          const { total, products, user } = action.payload;
-         state.data = products;
+         state.data = products.filter((e) => e.author._id === user._id);
          state.total = total;
          state.favorites = products.filter((e) => findLike(e, user));
          state.loading = false;
@@ -124,12 +125,20 @@ const productsSlice = createSlice({
             state.favorites = state.favorites.filter((e) => e._id !== product._id);
          }
       });
+      builder.addCase(fetchSearchProducts.pending, (state) => {
+         state.loading = true;
+         state.error = null;
+      });
       builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
-         state.data = action.payload;
+         state.data = filteredCards(action.payload);
          state.loading = false;
       });
       builder.addCase(fetchAddProducts.fulfilled, (state, action) => {
-         state.data = action.payload;
+         state.data = [...state.data, action.payload];
+         state.loading = false;
+      });
+      builder.addCase(fetchDeleteProducts.fulfilled, (state, action) => {
+         state.data = state.data.filter((e) => e._id !== action.payload._id);
          state.loading = false;
       });
    },

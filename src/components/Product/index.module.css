@@ -91,7 +91,7 @@
    border: 1px solid #cfd8dc;
    background-color: #fff;
    height: 48px;
-   border-radius: 100px;
+   /* border-radius: 100px; */
 }
 
 .plus,
@@ -117,7 +117,7 @@
 .delivery {
    display: flex;
    background-color: rgba(236, 239, 241, 0.6);
-   border-radius: 12px;
+   /* border-radius: 12px; */
    padding: 12px;
    align-items: flex-start;
 }
@@ -266,14 +266,16 @@
    width: 50px;
    height: 50px;
    border-radius: 50%;
+   object-fit: cover;
 }
 .textarea {
    border: 1px solid #7b8e98;
-   border-radius: 20px;
+   /* border-radius: 20px; */
    padding: 16px 14px;
    font-size: 14px;
    width: 100%;
    resize: none;
+   font-family: Montserrat;
 }
 .button__sendReview {
    max-width: 200px;

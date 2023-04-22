@@ -19,7 +19,9 @@ export const Footer = () => {
             <div className="footer__contact contact-hero">
                <div className="contact-hero__item-one">
                   {/* <Logo /> */}
-                  <Flora />
+                  <Link to={'/'} className="flora">
+                     <Flora />
+                  </Link>
                   <div className="footer__c">© «Интернет-магазин flora-shop.ru»</div>
                </div>
                <div className="contact-hero__item">

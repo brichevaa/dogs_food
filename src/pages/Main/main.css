@@ -33,3 +33,11 @@
 .btn-main:hover {
    background-color: #6f8f57;
 }
+.img__main-page {
+   max-width: 500px;
+}
+.main-page__body {
+   display: flex;
+   margin: 40px 0px 0px 0px;
+   justify-content: space-between;
+}
