@@ -20,3 +20,6 @@
 .btns__basket-card {
    cursor: pointer;
 }
+.basket-card__basket {
+   cursor: pointer;
+}

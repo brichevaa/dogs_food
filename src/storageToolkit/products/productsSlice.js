@@ -4,7 +4,7 @@ import { filteredCards, findLike } from '../../utils/utils';
 
 export const fetchProducts = createAsyncThunk(
    'products/fetchProducts',
-   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+   async function (_, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
       try {
          const { user } = getState();
          const products = await api.getProductList();
@@ -106,6 +106,7 @@ const productsSlice = createSlice({
          state.error = null;
       });
       builder.addCase(fetchProducts.fulfilled, (state, action) => {
+         // console.log(action);
          const { total, products, user } = action.payload;
          state.data = products.filter((e) => e.author._id === user._id);
          state.total = total;

@@ -11,7 +11,7 @@ import {
 import { ReactComponent as Basket } from '../Product/img/basket.svg';
 import { openNotification } from '../Notification/Notification';
 
-export const Card = ({ product, pictures, name, wight, price, discount, setBasketCounter }) => {
+export const Card = ({ product, pictures, name, wight, price, discount, onPlus }) => {
    const currentUser = useSelector((state) => state.user.data);
    const [isAdded, setIsAdded] = useState(false);
    const dispatch = useDispatch();
@@ -22,11 +22,6 @@ export const Card = ({ product, pictures, name, wight, price, discount, setBaske
       dispatch(fetchChangeLikeProduct(product));
    };
 
-   const onClickToCart = () => {
-      setIsAdded((state) => !state);
-   };
-   console.log(isAdded);
-
    const deleteCard = async (id) => {
       try {
          dispatch(fetchDeleteProducts(id));
@@ -35,6 +30,10 @@ export const Card = ({ product, pictures, name, wight, price, discount, setBaske
       } catch (error) {
          openNotification('error', 'Ошибка!', 'Ваш товар не был удален');
       }
+   };
+   const onClickToBasket = () => {
+      onPlus(product);
+      setIsAdded(!isAdded);
    };
 
    return (
@@ -64,12 +63,12 @@ export const Card = ({ product, pictures, name, wight, price, discount, setBaske
          </Link>
          <div className="card__buttons">
             <span
-               onClick={onClickToCart}
+               onClick={!isAdded && onClickToBasket}
                className={`btn btn_type_primary ${
                   isAdded ? 'btn_type_primary-active' : 'btn_type_primary'
                }`}
             >
-               {isAdded ? 'В корзине' : 'В корзину'}
+               {isAdded ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'}
             </span>
             {currentUser._id === product.author._id && (
                <Basket onClick={() => deleteCard(product._id)} className="card__basket" />

@@ -8,9 +8,11 @@ import { CreateProduct } from '../../CreateProduct/CreateProduct';
 import { UserOutlined } from '@ant-design/icons';
 import { HeartOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
+import { CardContext } from '../../../context/cardContext';
 
 export const Icons = ({ count, setModal, modal }) => {
    const { isAuth } = useContext(UserContext);
+   const { basketItems } = useContext(CardContext);
    const { favorites } = useSelector((state) => state.products);
    const [modalCreateProduct, setModalCreateProduct] = useState(false);
 
@@ -24,7 +26,9 @@ export const Icons = ({ count, setModal, modal }) => {
          <Link to={'/cart'} className="header__bubble-link">
             {/* <img src={logoPath} alt="лого корзина" className="logo__icons" /> */}
             <ShoppingCartOutlined />
-            {count !== 0 && <span className="header__bubble">{count}</span>}
+            {basketItems.length !== 0 && (
+               <span className="header__bubble">{basketItems.length}</span>
+            )}
          </Link>
          {isAuth ? (
             <Link to={'/profile'} onClick={() => setModal(true)}>

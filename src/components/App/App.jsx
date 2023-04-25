@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
@@ -30,13 +30,21 @@ import { Basket, Cart } from '../Basket/Basket';
 function App() {
    const [cards, setCards] = useState([]);
    const [searchQuery, setSearchQuery] = useState(undefined);
-   const [basketCounter, setBasketCounter] = useState(0);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
+   const [basketItems, setBusketItems] = useState(JSON.parse(localStorage.getItem('basket')) || []);
+   const isMounted = useRef(false);
 
    const dispatch = useDispatch(); // dispatch - передает данные
    const currentUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
    const { data: products, favorites } = useSelector((state) => state.products);
+
+   const onAddToBusket = (obj) => {
+      setBusketItems((prev) => [...prev, obj]);
+   };
+   const onRemoveFromBusket = (id) => {
+      setBusketItems(basketItems.filter((item) => item._id !== id));
+   };
 
    const handleSearch = (search) => {
       dispatch(fetchSearchProducts(search));
@@ -55,23 +63,27 @@ function App() {
       dispatch(fetchUser()).then(() => dispatch(fetchProducts()));
    }, [dispatch, isAuth]);
 
-   // useEffect(() => {
-   //    setCards(filteredCards(products, currentUser._id));
-   // }, [products, favorites]);
+   useEffect(() => {
+      if (isMounted.current) {
+         const json = JSON.stringify(basketItems);
+         localStorage.setItem('basket', json);
+      }
+      isMounted.current = true;
+   }, [basketItems]);
 
    const contextValue = {
       currentUser,
       searchQuery,
       setSearchQuery,
-      basketCounter,
-      setBasketCounter,
       isAuth,
    };
    const contextCardValue = {
       cards: cards,
       setCards,
       favorites,
-      setBasketCounter,
+      onAddToBusket,
+      basketItems,
+      onRemoveFromBusket,
    };
    const navigate = useNavigate();
 
@@ -130,7 +142,7 @@ function App() {
                         <Route path="/product/:productId" element={<ProductPage />}></Route>
                         <Route path="faq" element={<FaqPage />}></Route>
                         <Route path="/favorites" element={<Favorites />}></Route>
-                        <Route path="/cart" element={<Basket />}></Route>
+                        <Route path="/cart" element={<Basket cards={basketItems} />}></Route>
                         <Route path="/profile" element={<Profile />}></Route>
                         <Route path="/edit-account" element={<EditAccount />}></Route>
                         <Route path="*" element={<NotFound />}></Route>

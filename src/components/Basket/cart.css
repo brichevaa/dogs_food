@@ -1,3 +1,12 @@
-.cart {
-   margin: 20px 0px 0px 0px;
+.basket {
+   margin: 20px 0px 20px 0px;
+}
+.basket-card__left {
+   display: flex;
+   gap: 40px;
+   min-width: 500px;
+}
+.basket-card__right {
+   display: flex;
+   gap: 40px;
 }

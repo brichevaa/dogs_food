@@ -2,21 +2,10 @@ import { Logo } from './Logo/Logo';
 import { Search } from './Search/Search';
 import './header.css';
 import { Icons } from './Icons/Icons';
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../context/userContext';
 import { ReactComponent as Flora } from './Logo/flora.svg';
 import { Link } from 'react-router-dom';
 
 export const Header = ({ setModal, modal }) => {
-   const { basketCounter } = useContext(UserContext);
-   const [counter, setCounter] = useState(basketCounter);
-
-   useEffect(() => {
-      setCounter((st) => st + 1);
-
-      return () => setCounter(basketCounter);
-   }, [basketCounter]);
-
    return (
       <div className="header">
          <div className="container">
@@ -35,7 +24,7 @@ export const Header = ({ setModal, modal }) => {
                      <Link to={'/catalog'}>Каталог</Link>
                   </div>
                   <div className="header__right">
-                     <Icons count={counter} setModal={setModal} modal={modal} />
+                     <Icons setModal={setModal} modal={modal} />
                   </div>
                </div>
             </div>

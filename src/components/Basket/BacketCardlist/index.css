@@ -3,3 +3,7 @@
    flex-direction: column;
    gap: 20px;
 }
+.favorites__h1-right {
+   text-align: right;
+   font-size: 20px;
+}
