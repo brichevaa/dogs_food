@@ -13,15 +13,20 @@ export const fetchSingleProduct = createAsyncThunk(
 );
 
 const initialState = {
-   product: [],
-   loading: false,
+   product: {},
+   loading: true,
    error: null,
+   // data: 'dada'
 };
 
 export const singleProductSlice = createSlice({
    name: 'singleProduct',
    initialState: initialState,
-   reducers: {},
+   reducers: {
+      changeLikeStatus: (state, action) => {
+         state.product = {...state.product, likes: action.payload}
+      }
+   },
    extraReducers: (builder) => {
       builder.addCase(fetchSingleProduct.pending, (state) => {
          state.loading = true;
@@ -29,10 +34,13 @@ export const singleProductSlice = createSlice({
       });
       builder.addCase(fetchSingleProduct.fulfilled, (state, action) => {
          // console.log(action);
-         state.data = action.payload;
+         state.product = action.payload;
          state.loading = false;
       });
    },
 });
+
+
+export const { changeLikeStatus } = singleProductSlice.actions;
 
 export default singleProductSlice.reducer;
