@@ -4,18 +4,12 @@ import { CardContext } from '../../context/cardContext';
 import { useContext } from 'react';
 
 export const CardList = ({ cards }) => {
-   const { setBasketCounter, onAddToBusket } = useContext(CardContext);
+   const { onAddToBusket } = useContext(CardContext);
 
    return (
       <div className="cards">
          {cards.map((item) => (
-            <Card
-               {...item}
-               key={item._id}
-               product={item}
-               setBasketCounter={setBasketCounter}
-               onPlus={onAddToBusket}
-            />
+            <Card {...item} key={item._id} product={item} onPlus={onAddToBusket} />
          ))}
       </div>
    );

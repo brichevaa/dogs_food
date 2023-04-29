@@ -13,10 +13,11 @@ import { FormReviews } from '../FormReviews/FormReviews';
 import { ReactComponent as Basket } from './img/basket.svg';
 import { openNotification } from '../Notification/Notification';
 import { Back } from '../Back/Back';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CardContext } from '../../context/cardContext';
 import { Modal } from '../Modal/Modal';
 import { EditProduct } from '../../pages/Product/EditProduct/EditProduct';
+import { addItem, minusItem, totalCount } from '../../storageToolkit/basket/basketSlice';
 
 export const Product = ({
    id,
@@ -34,6 +35,7 @@ export const Product = ({
    const [modalEditProduct, setModalEditProduct] = useState(false);
    const [isAddedFromProduct, setIsAddedFromProduct] = useState(false);
    // const [basketCount, setBasketCount] = useState(1);
+   const { totalCount } = useSelector((state) => state.basket);
 
    const {
       register,
@@ -43,9 +45,14 @@ export const Product = ({
    } = useForm({ mode: 'onSubmit' });
 
    const actualUser = useSelector((state) => state.user.data);
-   const { onAddToBusket, basketPlusProduct, basketItems } = useContext(CardContext);
-   console.log(basketItems);
+   const dispatch = useDispatch();
    const navigate = useNavigate();
+   const cartItem = useSelector((state) =>
+      state.basket.items.find((obj) => obj.id === product._id)
+   );
+   const addedCount = cartItem ? cartItem.count : 0;
+
+   const { onAddToBusket } = useContext(CardContext);
 
    console.log({ product });
 
@@ -89,11 +96,15 @@ export const Product = ({
 
    const onClickToBasket = () => {
       onAddToBusket(product);
-      setIsAddedFromProduct(!isAddedFromProduct);
+      // setIsAddedFromProduct(!isAddedFromProduct);
    };
 
-   const onClickPlus = (id) => {
-      basketPlusProduct(id);
+   const onClickPlus = () => {
+      onAddToBusket(product);
+      // dispatch(addItem({ id: product._id }));
+   };
+   const onClickMinus = () => {
+      dispatch(minusItem(product._id));
    };
 
    useEffect(() => {
@@ -149,19 +160,21 @@ export const Product = ({
                )}
                <div className={s.btnWrap}>
                   <div className={s.left}>
-                     <button className={s.minus}>-</button>
-                     <span className={s.num}>{basketItems.count}</span>
-                     <button className={s.plus} onClick={() => onClickPlus(product._id)}>
+                     <button className={s.minus} onClick={() => onClickMinus()}>
+                        -
+                     </button>
+                     {addedCount >= 0 && <span className={s.num}>{addedCount}</span>}
+                     <button className={s.plus} onClick={() => onClickPlus()}>
                         +
                      </button>
                   </div>
                   <span
                      className={`btn btn_type_primary ${s.cart} ${
-                        isAddedFromProduct ? 'btn_type_primary-active' : 'btn_type_primary'
+                        addedCount ? 'btn_type_primary-active' : 'btn_type_primary'
                      }`}
                      onClick={() => onClickToBasket()}
                   >
-                     {isAddedFromProduct ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'}
+                     {addedCount ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'}
                   </span>
                </div>
                <button

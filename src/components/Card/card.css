@@ -174,3 +174,7 @@
 .card__basket {
    cursor: pointer;
 }
+.added-count {
+   border: 1px solid #7b8e98;
+   padding: 11px;
+}

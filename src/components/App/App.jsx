@@ -27,6 +27,7 @@ import { fetchUser } from '../../storageToolkit/user/userSlice';
 import { fetchProducts, fetchSearchProducts } from '../../storageToolkit/products/productsSlice';
 import { Basket, Cart } from '../Basket/Basket';
 import { Chart } from '../Chart/Chart';
+import { addItem } from '../../storageToolkit/basket/basketSlice';
 
 function App() {
    const [cards, setCards] = useState([]);
@@ -41,52 +42,62 @@ function App() {
    const { favorites } = useSelector((state) => state.products);
    // const singleProduct = useSelector((state) => state.product.data);
 
+   // const onAddToBusket = (product) => {
+   //    const itemsProduct = {
+   //       id: product._id,
+   //       name: product.name,
+   //       price: product.price,
+   //       pictures: product.pictures,
+   //       priceTotal: product.price,
+   //       count: 1,
+   //    };
+   //    basketItems.some((e) => e.id === itemsProduct.id)
+   //       ? itemsProduct.count++
+   //       : setBusketItems((prev) => [...prev, itemsProduct]);
+   // };
+
    const onAddToBusket = (product) => {
-      const itemsProduct = {
+      const item = {
          id: product._id,
          name: product.name,
          price: product.price,
          pictures: product.pictures,
-         priceTotal: product.price,
-         count: 1,
       };
-      basketItems.some((e) => e.id === itemsProduct.id)
-         ? itemsProduct.count++
-         : setBusketItems((prev) => [...prev, itemsProduct]);
+      dispatch(addItem(item));
    };
 
-   const basketPlusProduct = (id) => {
-      // console.log(id);
-      setBusketItems((item) => {
-         return item.map((element) => {
-            // console.log(element);
-            if (element.id === id) {
-               return {
-                  ...element,
-                  count: element.count + 1,
-                  priceTotal: (element.count + 1) * element.price,
-               };
-            }
-            return element;
-         });
-      });
-   };
+   // const basketPlusProduct = (id) => {
+   //    // console.log(id);
+   //    setBusketItems((item) => {
+   //       return item.map((element) => {
+   //          // console.log(element);
+   //          if (element.id === id) {
+   //             return {
+   //                ...element,
+   //                count: element.count + 1,
+   //                priceTotal: (element.count + 1) * element.price,
+   //             };
+   //          }
+   //          return element;
+   //       });
+   //    });
+   // };
 
-   const basketMinusProduct = (id) => {
-      setBusketItems((item) => {
-         return item.map((element) => {
-            if (element.id === id) {
-               const newCount = element.count - 1 > 1 ? element.count - 1 : 1;
-               return {
-                  ...element,
-                  count: newCount,
-                  priceTotal: newCount * element.price,
-               };
-            }
-            return element;
-         });
-      });
-   };
+   // const basketMinusProduct = (id) => {
+   //    setBusketItems((item) => {
+   //       return item.map((element) => {
+   //          if (element.id === id) {
+   //             const newCount = element.count - 1 > 1 ? element.count - 1 : 1;
+   //             return {
+   //                ...element,
+   //                count: newCount,
+   //                priceTotal: newCount * element.price,
+   //             };
+   //          }
+   //          return element;
+   //       });
+   //    });
+   // };
 
    const onRemoveFromBusket = (id) => {
       setBusketItems(basketItems.filter((item) => item.id !== id));
@@ -132,8 +143,6 @@ function App() {
       onRemoveFromBusket,
       modal,
       setModal,
-      basketPlusProduct,
-      basketMinusProduct,
    };
    const navigate = useNavigate();
 

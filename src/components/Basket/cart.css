@@ -10,3 +10,11 @@
    display: flex;
    gap: 40px;
 }
+.basket__header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+.basket__clear {
+   cursor: pointer;
+}

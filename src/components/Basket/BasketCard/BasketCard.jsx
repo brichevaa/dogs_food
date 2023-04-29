@@ -5,19 +5,32 @@ import { MinusCircleOutlined } from '@ant-design/icons';
 import { ReactComponent as Basket } from './busket.svg';
 import { CardContext } from '../../../context/cardContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { addItem, minusItem, removeItem } from '../../../storageToolkit/basket/basketSlice';
+import { useDispatch } from 'react-redux';
 
-export const BasketCard = ({ product, onDelete }) => {
-   const { setBusketItems, basketPlusProduct, basketMinusProduct } = useContext(CardContext);
+export const BasketCard = ({ product }) => {
    const navigate = useNavigate();
+   const dispatch = useDispatch();
 
-   const handlePlus = (id) => {
-      basketPlusProduct(id);
+   // const handlePlus = (id) => {
+   //    basketPlusProduct(id);
+   // };
+
+   const handlePlus = () => {
+      dispatch(addItem({ id: product.id }));
    };
-   const handleMinus = (id) => {
-      basketMinusProduct(id);
+
+   // const handleMinus = (id) => {
+   //    basketMinusProduct(id);
+   // };
+
+   const handleMinus = () => {
+      dispatch(minusItem(product.id));
    };
    const deleteFromBusket = (id) => {
-      onDelete(id);
+      if (window.confirm('Вы действительно хотите удалить товар?')) {
+         dispatch(removeItem(id));
+      }
    };
    return (
       <div className="basket-card">
@@ -43,12 +56,12 @@ export const BasketCard = ({ product, onDelete }) => {
                   <div className="basket-card__btns">
                      <PlusCircleOutlined
                         className="btns__basket-card"
-                        onClick={() => handlePlus(product.id)}
+                        onClick={() => handlePlus()}
                      />
                      <h1>{product.count}</h1>
                      <MinusCircleOutlined
                         className="btns__basket-card"
-                        onClick={() => handleMinus(product.id)}
+                        onClick={() => handleMinus()}
                      />
                   </div>
                </div>

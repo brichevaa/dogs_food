@@ -18,7 +18,7 @@ export const ProductPage = () => {
 
    // const [product, setProduct] = useState(null);
    const { product: singleProduct, loading } = useSelector((state) => state.product);
-   console.log({ singleProduct });
+   // console.log({ singleProduct });
 
    const onProductLike = () => {
       const wasLiked = findLike(singleProduct, actualUser);

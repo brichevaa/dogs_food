@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
 import './cart.css';
 import { Back } from '../Back/Back';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BasketCardlist } from './BacketCardlist/BasketCardlist';
 import { useContext } from 'react';
 import { CardContext } from '../../context/cardContext';
+import { clearItems } from '../../storageToolkit/basket/basketSlice';
 
 export const Basket = () => {
    const navigate = useNavigate();
-   const { basketItems } = useContext(CardContext);
+   // const { basketItems } = useContext(CardContext);
+   const dispatch = useDispatch();
+   const { items } = useSelector((state) => state.basket);
+
+   const onClearBasket = () => {
+      if (window.confirm('Вы действительно хотите очистить корзину?')) {
+         dispatch(clearItems());
+      }
+   };
+
    return (
       <div className="basket">
          <Back />
-         <h1 className="favorites__h1">Корзина товаров</h1>
-         {!!basketItems.length ? (
+         <div className="basket__header">
+            <h1 className="favorites__h1">Корзина товаров</h1>
+            <span onClick={() => onClearBasket()} className="basket__clear">
+               Очистить корзину
+            </span>
+         </div>
+         {!!items.length ? (
             <BasketCardlist />
          ) : (
             <div className="not-found">
