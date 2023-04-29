@@ -6,18 +6,19 @@ import { getIssues } from '../../utils/utils';
 import { NotFound } from '../NotFound/NotFound';
 import { useSelector } from 'react-redux';
 import { SortedGoods } from '../../components/SortedGoods/SortedGoods';
+import { Pagination, PaginationMain } from '../../components/Pagination/Pagination';
 
 export const CatalogPage = () => {
-   const { searchQuery } = useContext(UserContext);
+   const { searchRequest } = useContext(UserContext);
    const { data: products } = useSelector((state) => state.products);
 
    return (
       <>
-         {!searchQuery && <SortedGoods />}
-         {searchQuery && (
+         {!searchRequest && <SortedGoods />}
+         {searchRequest && (
             <div className="catalog-page">
                <p className="catalog-page__p">
-                  По запросу <b>{searchQuery}</b> найдено {products.length}
+                  По запросу <b>{searchRequest}</b> найдено {products.length}
                   {getIssues(products.length)}
                </p>
             </div>
@@ -25,6 +26,7 @@ export const CatalogPage = () => {
          {!products.length && <NotFound />}
 
          <CardList cards={products} />
+         <PaginationMain />
       </>
    );
 };

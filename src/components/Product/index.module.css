@@ -25,7 +25,7 @@
 }
 .productTitle__reviews {
    margin: 0px 0px 20px 0px;
-   font-weight: 800;
+   font-weight: 600;
    font-size: 28px;
    line-height: 32px;
 }
@@ -54,7 +54,7 @@
 .h1 {
    font-size: 28px;
    line-height: 32px;
-   font-weight: 800;
+   font-weight: 600;
    margin: 4px 0px 4px 0px;
 }
 
@@ -69,9 +69,14 @@
 .price {
    font-size: 28px;
    line-height: 32px;
-   font-weight: 800;
+   font-weight: 600;
    display: block;
    margin-bottom: 24px;
+}
+.author_name {
+   font-size: 20px;
+   line-height: 32px;
+   font-weight: 600;
 }
 
 .btnWrap {
@@ -155,7 +160,7 @@
 .title {
    font-size: 24px;
    line-height: 28px;
-   font-weight: 800;
+   font-weight: 600;
    margin-bottom: 20px;
    margin-top: 20px;
 }
@@ -289,6 +294,9 @@
    font-size: 16px;
    font-weight: 700;
    line-height: 20px;
+}
+.edit__button {
+   margin: 30px 0px 0px 0px;
 }
 @media (max-width: 1000px) {
    .product {

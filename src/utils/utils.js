@@ -8,7 +8,7 @@ export const getIssues = (number) => {
 
 export const useDebounce = (value, delay) => {
    const [debounceValue, setDebounceValue] = useState(value);
-   // const currentUser = useSelector(({ user }) => user.data);
+   // const actualUser = useSelector(({ user }) => user.data);
 
    useEffect(() => {
       const timeout = setTimeout(() => {
@@ -21,8 +21,8 @@ export const useDebounce = (value, delay) => {
    return debounceValue;
 };
 
-export const findLike = (product, currentUser) =>
-   product?.likes?.some((el) => el === currentUser._id);
+export const findLike = (product, actualUser) =>
+   product?.likes?.some((el) => el === actualUser._id);
 
 export const filteredCards = (products) => {
    // return products;
@@ -30,10 +30,8 @@ export const filteredCards = (products) => {
 };
 
 export const getUser = (id) => {
-   // console.log(id);
    if (!users.length) return 'User';
    const user = users.find((e) => e._id === id);
-   // console.log(user);
    if (user?.avatar.includes('default-image')) {
       return {
          ...user,

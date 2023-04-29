@@ -5,7 +5,7 @@ import { Icons } from './Icons/Icons';
 import { ReactComponent as Flora } from './Logo/flora.svg';
 import { Link } from 'react-router-dom';
 
-export const Header = ({ setModal, modal }) => {
+export const Header = () => {
    return (
       <div className="header">
          <div className="container">
@@ -22,9 +22,10 @@ export const Header = ({ setModal, modal }) => {
                   <div className="header__items">
                      <Link to={'/'}>Главная</Link>
                      <Link to={'/catalog'}>Каталог</Link>
+                     <Link to={'/chart'}>График</Link>
                   </div>
                   <div className="header__right">
-                     <Icons setModal={setModal} modal={modal} />
+                     <Icons />
                   </div>
                </div>
             </div>

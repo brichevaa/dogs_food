@@ -26,37 +26,82 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../storageToolkit/user/userSlice';
 import { fetchProducts, fetchSearchProducts } from '../../storageToolkit/products/productsSlice';
 import { Basket, Cart } from '../Basket/Basket';
+import { Chart } from '../Chart/Chart';
 
 function App() {
    const [cards, setCards] = useState([]);
-   const [searchQuery, setSearchQuery] = useState(undefined);
+   const [searchRequest, setSearchRequest] = useState(undefined);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
    const [basketItems, setBusketItems] = useState(JSON.parse(localStorage.getItem('basket')) || []);
    const isMounted = useRef(false);
 
    const dispatch = useDispatch(); // dispatch - передает данные
-   const currentUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
-   const { data: products, favorites } = useSelector((state) => state.products);
+   const actualUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
+   const { favorites } = useSelector((state) => state.products);
+   // const singleProduct = useSelector((state) => state.product.data);
 
-   const onAddToBusket = (obj) => {
-      setBusketItems((prev) => [...prev, obj]);
+   const onAddToBusket = (product) => {
+      const itemsProduct = {
+         id: product._id,
+         name: product.name,
+         price: product.price,
+         pictures: product.pictures,
+         priceTotal: product.price,
+         count: 1,
+      };
+      basketItems.some((e) => e.id === itemsProduct.id)
+         ? itemsProduct.count++
+         : setBusketItems((prev) => [...prev, itemsProduct]);
    };
+
+   const basketPlusProduct = (id) => {
+      // console.log(id);
+      setBusketItems((item) => {
+         return item.map((element) => {
+            // console.log(element);
+            if (element.id === id) {
+               return {
+                  ...element,
+                  count: element.count + 1,
+                  priceTotal: (element.count + 1) * element.price,
+               };
+            }
+            return element;
+         });
+      });
+   };
+
+   const basketMinusProduct = (id) => {
+      setBusketItems((item) => {
+         return item.map((element) => {
+            if (element.id === id) {
+               const newCount = element.count - 1 > 1 ? element.count - 1 : 1;
+               return {
+                  ...element,
+                  count: newCount,
+                  priceTotal: newCount * element.price,
+               };
+            }
+            return element;
+         });
+      });
+   };
+
    const onRemoveFromBusket = (id) => {
-      setBusketItems(basketItems.filter((item) => item._id !== id));
+      setBusketItems(basketItems.filter((item) => item.id !== id));
    };
 
    const handleSearch = (search) => {
       dispatch(fetchSearchProducts(search));
-      // api.searchProducts(search).then((data) => setCards(filteredCards(data, currentUser._id)));
    };
 
-   const debounceValueInApp = useDebounce(searchQuery, 500);
+   const debounceValue = useDebounce(searchRequest, 500);
 
    useEffect(() => {
-      if (debounceValueInApp === undefined) return;
-      handleSearch(debounceValueInApp);
-   }, [debounceValueInApp]);
+      if (debounceValue === undefined) return;
+      handleSearch(debounceValue);
+   }, [debounceValue]);
 
    useEffect(() => {
       if (!isAuth) return;
@@ -71,10 +116,10 @@ function App() {
       isMounted.current = true;
    }, [basketItems]);
 
-   const contextValue = {
-      currentUser,
-      searchQuery,
-      setSearchQuery,
+   const contextUserValue = {
+      actualUser,
+      searchRequest,
+      setSearchRequest,
       isAuth,
    };
    const contextCardValue = {
@@ -83,7 +128,12 @@ function App() {
       favorites,
       onAddToBusket,
       basketItems,
+      setBusketItems,
       onRemoveFromBusket,
+      modal,
+      setModal,
+      basketPlusProduct,
+      basketMinusProduct,
    };
    const navigate = useNavigate();
 
@@ -131,18 +181,19 @@ function App() {
 
    return (
       <>
-         <UserContext.Provider value={contextValue}>
+         <UserContext.Provider value={contextUserValue}>
             <CardContext.Provider value={contextCardValue}>
-               <Header setModal={setModal} modal={modal} />
+               <Header />
                {isAuth ? (
                   <main className="content container">
                      <Routes>
                         <Route path="/" element={<MainPage />}></Route>
+                        <Route path="/chart" element={<Chart />}></Route>
                         <Route path="/catalog" element={<CatalogPage />}></Route>
-                        <Route path="/product/:productId" element={<ProductPage />}></Route>
-                        <Route path="faq" element={<FaqPage />}></Route>
+                        <Route path="/product/:id" element={<ProductPage />}></Route>
+                        <Route path="/faq" element={<FaqPage />}></Route>
                         <Route path="/favorites" element={<Favorites />}></Route>
-                        <Route path="/cart" element={<Basket cards={basketItems} />}></Route>
+                        <Route path="/cart" element={<Basket />}></Route>
                         <Route path="/profile" element={<Profile />}></Route>
                         <Route path="/edit-account" element={<EditAccount />}></Route>
                         <Route path="*" element={<NotFound />}></Route>

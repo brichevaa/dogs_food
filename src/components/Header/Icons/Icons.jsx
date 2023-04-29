@@ -10,9 +10,9 @@ import { HeartOutlined } from '@ant-design/icons';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { CardContext } from '../../../context/cardContext';
 
-export const Icons = ({ count, setModal, modal }) => {
+export const Icons = () => {
    const { isAuth } = useContext(UserContext);
-   const { basketItems } = useContext(CardContext);
+   const { basketItems, setModal } = useContext(CardContext);
    const { favorites } = useSelector((state) => state.products);
    const [modalCreateProduct, setModalCreateProduct] = useState(false);
 

@@ -17,7 +17,7 @@ export const EditAccount = () => {
    } = useForm({ mode: 'onSubmit' });
 
    const dispatch = useDispatch();
-   const currentUser = useSelector((state) => state.user.data);
+   const actualUser = useSelector((state) => state.user.data);
 
    const sendProfileData = async (data) => {
       await dispatch(changeUser({ name: data.name, about: data.about }));
@@ -39,14 +39,38 @@ export const EditAccount = () => {
          <h1 className="profile__h1">Мои данные</h1>
          <h2 className="profile__h2">Изменить данные</h2>
 
-         {currentUser?.name && currentUser?.about && (
+         {actualUser?.name && actualUser?.about && (
             <div className="edit__wrapper">
                <Form submitForm={handleSubmit(sendProfileData)} className="edit__form">
                   <div className="edit-account__info">
-                     <input {...register('name', required)} defaultValue={currentUser.name} className="auth__input" placeholder="Имя" type="text" />
-                     <input {...register('about', required)} defaultValue={currentUser.about} className="auth__input" placeholder="О себе" type="text" />
-                     <input {...register('email')} className="auth__input" defaultValue={currentUser.email} placeholder="Почта" disabled />
-                     <input {...register('id')} className="auth__input" defaultValue={currentUser._id} placeholder="id" disabled />
+                     <input
+                        {...register('name', required)}
+                        defaultValue={actualUser.name}
+                        className="auth__input"
+                        placeholder="Имя"
+                        type="text"
+                     />
+                     <input
+                        {...register('about', required)}
+                        defaultValue={actualUser.about}
+                        className="auth__input"
+                        placeholder="О себе"
+                        type="text"
+                     />
+                     <input
+                        {...register('email')}
+                        className="auth__input"
+                        defaultValue={actualUser.email}
+                        placeholder="Почта"
+                        disabled
+                     />
+                     <input
+                        {...register('id')}
+                        className="auth__input"
+                        defaultValue={actualUser._id}
+                        placeholder="id"
+                        disabled
+                     />
                   </div>
                   <div>
                      {' '}
@@ -56,8 +80,17 @@ export const EditAccount = () => {
                <h2 className="profile__h2">Изменить аватар</h2>
                <Form submitForm={handleSubmit(changeAvatar)} className="edit__avatar">
                   <div className="profile__avatar">
-                     <img src={currentUser.avatar} alt="аватар пользователя" className="profile__avatar-img" />
-                     <input {...register('avatar')} className="auth__input" defaultValue={currentUser?.avatar} placeholder="avatar" />
+                     <img
+                        src={actualUser.avatar}
+                        alt="аватар пользователя"
+                        className="profile__avatar-img"
+                     />
+                     <input
+                        {...register('avatar')}
+                        className="auth__input"
+                        defaultValue={actualUser?.avatar}
+                        placeholder="avatar"
+                     />
                   </div>
                   <div>
                      <BaseButton type="submit" className="edit__btn">

@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchUser } from '../user/userSlice';
 import { filteredCards, findLike } from '../../utils/utils';
 
 export const fetchProducts = createAsyncThunk(
@@ -94,6 +93,14 @@ const productsSlice = createSlice({
                   (a, b) => new Date(b.created_at) - new Date(a.created_at)
                );
                break;
+            // case 'По рейтингу':
+            //    const rateAcc = state.data.map((e) =>
+            //       Math.floor(
+            //          e.reviews.reduce((acc, el) => (acc = acc + el.rating), 0) / e.reviews.length
+            //       )
+            //    );
+            //    state.data = rateAcc.sort((a, b) => b - a);
+            //    break;
             default:
                state.data = state.data.sort((a, b) => b.discount - a.discount);
                break;
@@ -109,6 +116,7 @@ const productsSlice = createSlice({
          // console.log(action);
          const { total, products, user } = action.payload;
          state.data = products.filter((e) => e.author._id === user._id);
+         // state.data = products;
          state.total = total;
          state.favorites = products.filter((e) => findLike(e, user));
          state.loading = false;

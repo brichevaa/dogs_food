@@ -12,18 +12,29 @@ import { ReactComponent as Basket } from '../Product/img/basket.svg';
 import { openNotification } from '../Notification/Notification';
 
 export const Card = ({ product, pictures, name, wight, price, discount, onPlus }) => {
-   const currentUser = useSelector((state) => state.user.data);
+   const actualUser = useSelector((state) => state.user.data);
    const [isAdded, setIsAdded] = useState(false);
    const dispatch = useDispatch();
    const navigate = useNavigate();
 
-   const isLiked = findLike(product, currentUser);
+   console.log(product);
+
+   const isLiked = findLike(product, actualUser);
    const handleLikeClick = () => {
       dispatch(fetchChangeLikeProduct(product));
    };
 
+   // const areYouSure = () => {
+   //    if (!alert('Вы уверены что хотите удалить товар?')) {
+   //       return;
+   //    } else {
+   //       deleteCard(product._id);
+   //    }
+   // };
+
    const deleteCard = async (id) => {
       try {
+         alert('Вы уверены что хотите удалить товар?');
          dispatch(fetchDeleteProducts(id));
          navigate('/catalog');
          openNotification('success', 'Успешно!', 'Ваш товар успешно удален');
@@ -63,14 +74,14 @@ export const Card = ({ product, pictures, name, wight, price, discount, onPlus }
          </Link>
          <div className="card__buttons">
             <span
-               onClick={!isAdded && onClickToBasket}
+               onClick={() => onClickToBasket()}
                className={`btn btn_type_primary ${
                   isAdded ? 'btn_type_primary-active' : 'btn_type_primary'
                }`}
             >
                {isAdded ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'}
             </span>
-            {currentUser._id === product.author._id && (
+            {actualUser._id === product.author._id && (
                <Basket onClick={() => deleteCard(product._id)} className="card__basket" />
             )}
          </div>

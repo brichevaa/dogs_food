@@ -15,7 +15,6 @@ export const SortedGoods = () => {
       { id: 'Сначала дешёвые' },
       { id: 'Сначала дорогие' },
       { id: 'По рейтингу' },
-      { id: 'По скидке' },
    ];
    return (
       <div className="sort-cards">

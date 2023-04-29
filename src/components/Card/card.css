@@ -129,6 +129,7 @@
    display: inline-block;
    transition: background-color 0.3s;
    cursor: pointer;
+   text-align: center;
 }
 
 .btn_type_primary {
