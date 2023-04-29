@@ -5,10 +5,12 @@
    align-items: center;
    justify-content: center;
    gap: 1rem;
+   font-family: Montserrat;
 }
 .btn__not-found {
    background-color: white;
    border: 1px #cfd8dc solid;
+   font-family: Montserrat;
 }
 .not-found__text {
    font-size: 16px;
@@ -16,9 +18,11 @@
    font-weight: bold;
    max-width: 250px;
    text-align: center;
+   font-family: Montserrat;
 }
 .not-found__text-gray {
    color: #7b8e98;
    font-size: 14px;
    line-height: 20px;
+   font-family: Montserrat;
 }

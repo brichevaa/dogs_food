@@ -1,0 +1,25 @@
+.basket-card__wrapper {
+   display: flex;
+   gap: 20px;
+   justify-content: space-between;
+   /* flex-direction: column; */
+}
+
+.basket-card__img {
+   max-width: 100px;
+}
+.basket-card__info {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+}
+.basket-card__btns {
+   display: flex;
+   gap: 20px;
+}
+.btns__basket-card {
+   cursor: pointer;
+}
+.basket-card__basket {
+   cursor: pointer;
+}

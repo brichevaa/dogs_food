@@ -19,15 +19,17 @@ export const CreateProduct = ({ setModalCreateProduct }) => {
    } = useForm({ mode: 'onSubmit' });
 
    const navigate = useNavigate();
+   const dispatch = useDispatch();
 
-   const { cards, setCards } = useContext(CardContext);
+   // const { cards, setCards } = useContext(CardContext);
 
    const createProduct = async (data) => {
       console.log({ data });
       try {
-         const result = await api.addProduct({ ...data });
+         dispatch(fetchAddProducts(data));
+         // const result = await api.addProduct({ ...data });
          navigate('/catalog');
-         setCards([...cards, result]);
+         // setCards([...cards, result]);
          setModalCreateProduct(false);
          openNotification('success', 'Успешно!', 'Ваш товар успешно добавлен');
       } catch (error) {

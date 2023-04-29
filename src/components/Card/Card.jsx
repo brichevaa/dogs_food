@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { findLike } from '../../utils/utils';
 import './card.css';
@@ -8,51 +8,44 @@ import {
    fetchChangeLikeProduct,
    fetchDeleteProducts,
 } from '../../storageToolkit/products/productsSlice';
-import { api } from '../../utils/api';
 import { ReactComponent as Basket } from '../Product/img/basket.svg';
-import { CardContext } from '../../context/cardContext';
 import { openNotification } from '../Notification/Notification';
 
-export const Card = ({ product, pictures, name, wight, price, discount, setBasketCounter }) => {
-   const currentUser = useSelector((state) => state.user.data);
+export const Card = ({ product, pictures, name, wight, price, discount, onPlus }) => {
+   const actualUser = useSelector((state) => state.user.data);
+   const [isAdded, setIsAdded] = useState(false);
    const dispatch = useDispatch();
    const navigate = useNavigate();
 
-   const isLiked = findLike(product, currentUser);
+   console.log(product);
+
+   const isLiked = findLike(product, actualUser);
    const handleLikeClick = () => {
       dispatch(fetchChangeLikeProduct(product));
    };
 
-   const { setCards } = useContext(CardContext);
+   // const areYouSure = () => {
+   //    if (!alert('Вы уверены что хотите удалить товар?')) {
+   //       return;
+   //    } else {
+   //       deleteCard(product._id);
+   //    }
+   // };
 
    const deleteCard = async (id) => {
-      console.log(id);
       try {
-         // dispatch(fetchDeleteProducts(id));
-         await api.deleteProductById(id);
+         alert('Вы уверены что хотите удалить товар?');
+         dispatch(fetchDeleteProducts(id));
          navigate('/catalog');
-         setCards((state) => state.filter((e) => e._id !== product._id));
          openNotification('success', 'Успешно!', 'Ваш товар успешно удален');
       } catch (error) {
          openNotification('error', 'Ошибка!', 'Ваш товар не был удален');
       }
    };
-   // const deleteReview = async (id) => {
-   //    const res = await api.deleteReview(product._id, id);    // функция по удалению ревью для примера, не раскомментировать
-   //    setProduct(() => ({ ...res }));
-   //    return res;
-   // };
-
-   // const deleteProduct = async () => {
-   //    try {
-   //      await api.deleteProductById(id);
-   //      navigate('/catalog');
-   //      setItems(state => state.filter(e => e._id !== id));
-   //      openNotification('success', 'Успешно', 'Товар успешно удален')
-   //    } catch (error) {
-   //      openNotification('error', 'Ошибка', 'Товар удалить не удалось')
-   //    }
-   //  };
+   const onClickToBasket = () => {
+      onPlus(product);
+      setIsAdded(!isAdded);
+   };
 
    return (
       <div className="card">
@@ -70,7 +63,9 @@ export const Card = ({ product, pictures, name, wight, price, discount, setBaske
             </button>
          </div>
          <Link to={`/product/${product._id}`} className="card__link">
-            <img src={pictures} alt="карточка товара" className="card__image" />
+            <div className="card__body">
+               <img src={pictures} alt="карточка товара" className="card__image" />
+            </div>
             <div className="card__description">
                <span className="card__price">{price} ₽</span>
                <span className="card__wight">{wight}</span>
@@ -79,13 +74,15 @@ export const Card = ({ product, pictures, name, wight, price, discount, setBaske
          </Link>
          <div className="card__buttons">
             <span
-               onClick={() => setBasketCounter((state) => state + 1)}
-               className="btn btn_type_primary "
+               onClick={() => onClickToBasket()}
+               className={`btn btn_type_primary ${
+                  isAdded ? 'btn_type_primary-active' : 'btn_type_primary'
+               }`}
             >
-               В корзину
+               {isAdded ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'}
             </span>
-            {currentUser._id === product.author._id && (
-               <Basket onClick={() => deleteCard(product._id)} />
+            {actualUser._id === product.author._id && (
+               <Basket onClick={() => deleteCard(product._id)} className="card__basket" />
             )}
          </div>
       </div>

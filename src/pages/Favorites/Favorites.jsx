@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 
 export const Favorites = () => {
    const { favorites } = useSelector((state) => state.products);
+   console.log(favorites);
 
    const navigate = useNavigate();
 

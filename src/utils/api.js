@@ -43,6 +43,13 @@ class Api {
          body: JSON.stringify(data),
       }).then((res) => onResponse(res));
    }
+   changeProduct(productId, body) {
+      return fetch(`${this._baseUrl}/products/${productId}`, {
+         ...this._newHeaders(),
+         method: 'PATCH',
+         body: JSON.stringify(body),
+      }).then((res) => onResponse(res));
+   }
    deleteProductById(id) {
       return fetch(`${this._baseUrl}/products/${id}`, {
          ...this._newHeaders(),

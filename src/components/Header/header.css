@@ -1,5 +1,5 @@
 .header {
-   background-color: #ffe44d;
+   background-color: #dad5d1;
    width: 100%;
    padding: 16px 10px 16px 10px;
    flex: 0 0 auto;
@@ -9,6 +9,7 @@
    width: 100%;
    align-items: center;
    justify-content: space-between;
+   gap: 20px;
 }
 .header__wrapper {
    display: flex;
@@ -27,8 +28,8 @@
    display: flex;
    align-items: center;
    justify-content: space-between;
-   gap: 40px;
-   margin: 0px 0px 0px 80px;
+   gap: 20px;
+   /* margin: 0px 0px 0px 80px; */
 }
 .header__logo {
    margin: 0px 100px 0px 0px;
@@ -50,4 +51,12 @@
       gap: 20px;
       padding: 0 10px 0 10px;
    }
+}
+
+.flora {
+   width: 130px;
+}
+.header__items {
+   display: flex;
+   gap: 20px;
 }
