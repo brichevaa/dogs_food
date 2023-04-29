@@ -6,7 +6,10 @@ import { api } from '../../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { findLike } from '../../utils/utils';
 import { fetchChangeLikeProduct } from '../../storageToolkit/products/productsSlice';
-import { fetchSingleProduct } from '../../storageToolkit/singleProduct/singleProductSlice';
+import {
+   fetchSingleProduct,
+   changeLikeStatus,
+} from '../../storageToolkit/singleProduct/singleProductSlice';
 
 export const ProductPage = () => {
    const idParamsInSearchQuery = useParams();
@@ -14,7 +17,7 @@ export const ProductPage = () => {
    const dispatch = useDispatch();
 
    // const [product, setProduct] = useState(null);
-   const singleProduct = useSelector((state) => state.product.data);
+   const { product: singleProduct, loading } = useSelector((state) => state.product);
    console.log({ singleProduct });
 
    const onProductLike = () => {
@@ -24,12 +27,14 @@ export const ProductPage = () => {
          const filteredLikes = singleProduct.likes.filter((e) => e !== actualUser._id);
          console.log(filteredLikes);
          // setProduct({ ...product, likes: filteredLikes });
-         dispatch(fetchSingleProduct(idParamsInSearchQuery.id));
+         dispatch(changeLikeStatus(filteredLikes));
+         // dispatch(fetchSingleProduct(idParamsInSearchQuery.id));
       } else {
          const addedLikes = [...singleProduct.likes, actualUser._id];
          console.log(addedLikes);
          // setProduct({ ...product, likes: addedLikes });
-         dispatch(fetchSingleProduct(idParamsInSearchQuery.id));
+         // dispatch(fetchSingleProduct(idParamsInSearchQuery.id));
+         dispatch(changeLikeStatus(addedLikes));
       }
    };
    const onSendReview = (newProduct) => {
@@ -57,8 +62,11 @@ export const ProductPage = () => {
       if (!idParamsInSearchQuery.id) return;
       dispatch(fetchSingleProduct(idParamsInSearchQuery.id));
    }, [idParamsInSearchQuery?.id]);
+   // singleProduct === {}; !!!! DEPRECATED
+   // JSON.stringify(singleProduct) === '{}'
+   // !!Object.keys(singleProduct).length
 
-   return singleProduct && actualUser ? (
+   return !loading && actualUser ? (
       <Product
          id={idParamsInSearchQuery.id}
          product={singleProduct}

@@ -55,10 +55,11 @@ export const fetchChangeLikeProduct = createAsyncThunk(
    'products/fetchChangeLikeProduct',
    async function (product, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
       try {
-         const { user } = getState();
+         const { user, product: singleProduct } = getState();
+         // fixme - refactor -> take from inside
          const wasLiked = findLike(product, user.data);
          const data = await api.changeLikeProductStatus(product._id, wasLiked);
-         return fulfillWithValue({ product: data, wasLiked: wasLiked });
+         return fulfillWithValue({ product: data, wasLiked: wasLiked, singleProduct, user });
       } catch (error) {
          rejectWithValue(error);
       }
@@ -124,14 +125,16 @@ const productsSlice = createSlice({
       builder.addCase(fetchChangeLikeProduct.fulfilled, (state, action) => {
          state.loading = false;
          state.error = null;
-         const { product, wasLiked } = action.payload;
+         const { product, wasLiked, singleProduct, user } = action.payload;
          state.data = state.data.map((e) => {
             return e._id === product._id ? product : e;
          });
          if (!wasLiked) {
             state.favorites.push(product);
+            // singleProduct = {...singleProduct, likes: [...singleProduct.likes, user.data._id]}
          } else {
             state.favorites = state.favorites.filter((e) => e._id !== product._id);
+            // singleProduct.product = {...singleProduct.product, likes: singleProduct.product.likes.filter(e => e !== user.data._id)}
          }
       });
       builder.addCase(fetchSearchProducts.pending, (state) => {
