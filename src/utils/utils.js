@@ -42,3 +42,12 @@ export const getUser = (id) => {
 
    return user;
 };
+
+export const getBasketFromLS = () => {
+   const data = localStorage.getItem('basket');
+   return data ? JSON.parse(data) : [];
+};
+
+export const calcTotalPrice = (items) => {
+   return items.reduce((sum, obj) => obj.price * obj.count + sum, 0);
+};

@@ -34,27 +34,13 @@ function App() {
    const [searchRequest, setSearchRequest] = useState(undefined);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
-   const [basketItems, setBusketItems] = useState(JSON.parse(localStorage.getItem('basket')) || []);
-   const isMounted = useRef(false);
-
-   const dispatch = useDispatch(); // dispatch - передает данные
-   const actualUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
    const { favorites } = useSelector((state) => state.products);
+   const { items } = useSelector((state) => state.basket);
+   const actualUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
+   const dispatch = useDispatch(); // dispatch - передает данные
    // const singleProduct = useSelector((state) => state.product.data);
 
-   // const onAddToBusket = (product) => {
-   //    const itemsProduct = {
-   //       id: product._id,
-   //       name: product.name,
-   //       price: product.price,
-   //       pictures: product.pictures,
-   //       priceTotal: product.price,
-   //       count: 1,
-   //    };
-   //    basketItems.some((e) => e.id === itemsProduct.id)
-   //       ? itemsProduct.count++
-   //       : setBusketItems((prev) => [...prev, itemsProduct]);
-   // };
+   const isMounted = useRef(false);
 
    const onAddToBusket = (product) => {
       const item = {
@@ -64,43 +50,6 @@ function App() {
          pictures: product.pictures,
       };
       dispatch(addItem(item));
-   };
-
-   // const basketPlusProduct = (id) => {
-   //    // console.log(id);
-   //    setBusketItems((item) => {
-   //       return item.map((element) => {
-   //          // console.log(element);
-   //          if (element.id === id) {
-   //             return {
-   //                ...element,
-   //                count: element.count + 1,
-   //                priceTotal: (element.count + 1) * element.price,
-   //             };
-   //          }
-   //          return element;
-   //       });
-   //    });
-   // };
-
-   // const basketMinusProduct = (id) => {
-   //    setBusketItems((item) => {
-   //       return item.map((element) => {
-   //          if (element.id === id) {
-   //             const newCount = element.count - 1 > 1 ? element.count - 1 : 1;
-   //             return {
-   //                ...element,
-   //                count: newCount,
-   //                priceTotal: newCount * element.price,
-   //             };
-   //          }
-   //          return element;
-   //       });
-   //    });
-   // };
-
-   const onRemoveFromBusket = (id) => {
-      setBusketItems(basketItems.filter((item) => item.id !== id));
    };
 
    const handleSearch = (search) => {
@@ -121,11 +70,11 @@ function App() {
 
    useEffect(() => {
       if (isMounted.current) {
-         const json = JSON.stringify(basketItems);
+         const json = JSON.stringify(items);
          localStorage.setItem('basket', json);
       }
       isMounted.current = true;
-   }, [basketItems]);
+   }, [items]);
 
    const contextUserValue = {
       actualUser,
@@ -138,9 +87,6 @@ function App() {
       setCards,
       favorites,
       onAddToBusket,
-      basketItems,
-      setBusketItems,
-      onRemoveFromBusket,
       modal,
       setModal,
    };

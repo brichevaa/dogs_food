@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { calcTotalPrice, getBasketFromLS } from '../../utils/utils';
 
 const initialState = {
-   items: [],
+   items: getBasketFromLS(),
    totalPrice: 0,
    totalCount: 0,
    loading: false,
@@ -23,9 +24,7 @@ const basketSlice = createSlice({
                count: 1,
             });
          }
-         state.totalPrice = state.items.reduce((sum, obj) => {
-            return obj.price * obj.count + sum;
-         }, 0);
+         state.totalPrice = calcTotalPrice(state.items);
       },
       minusItem(state, action) {
          const findItem = state.items.find((obj) => obj.id === action.payload);
