@@ -190,5 +190,53 @@
       "available": true,
       "stock": 10,
       "picture": "https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_button-fern_medium_hyde_black.jpg?v=1680592573"
+   },
+   {
+      "name": "Пеперомия",
+      "price": 2199,
+      "discount": 10,
+      "wight": "100 г",
+      "description": "Пеперомия туполистная",
+      "isFavorite": true,
+      "isCart": false,
+      "available": true,
+      "stock": 10,
+      "picture": "https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_peperomia-green_variant_medium_grant_black.jpg?v=1678207555"
+   },
+   {
+      "name": "Филодендрон",
+      "price": 1799,
+      "discount": 10,
+      "wight": "100 г",
+      "description": "Филодендрон",
+      "isFavorite": true,
+      "isCart": false,
+      "available": true,
+      "stock": 10,
+      "picture": "https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_phildendron-green_medium_hyde_cream.jpg?v=1680593275"
+   },
+   {
+      "name": "Филодендрон Ксанаду",
+      "price": 1999,
+      "discount": 10,
+      "wight": "100 г",
+      "description": "Филодендрон Ксанаду",
+      "isFavorite": true,
+      "isCart": false,
+      "available": true,
+      "stock": 10,
+      "picture": "https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_Philodendron-Xanadu_Medium_Grant_Black.jpg?v=1680592816"
+   },
+   {
+      "name": "Строманта ",
+      "price": 2899,
+      "discount": 10,
+      "wight": "100 г",
+      "description": "Строманта",
+      "isFavorite": true,
+      "isCart": false,
+      "available": true,
+      "stock": 10,
+      "picture": "https://cdn.shopify.com/s/files/1/0150/6262/files/the-sill_LargeStromantheTriostar_Large_Helenaplanter-Cream_variant.jpg?v=1682361227"
    }
 ]

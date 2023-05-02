@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { calcTotalPrice, getBasketFromLS } from '../../utils/utils';
 
+const basketData = getBasketFromLS();
+
 const initialState = {
-   items: getBasketFromLS(),
-   totalPrice: 0,
+   items: basketData.items,
+   totalPrice: basketData.totalPrice,
    totalCount: 0,
    loading: false,
 };
@@ -14,7 +16,6 @@ const basketSlice = createSlice({
    reducers: {
       addItem(state, action) {
          // state.items.push(action.payload);
-         console.log(action.payload);
          const findItem = state.items.find((obj) => obj.id === action.payload.id);
          if (findItem) {
             findItem.count++;
@@ -31,6 +32,8 @@ const basketSlice = createSlice({
          if (findItem) {
             findItem.count--;
          }
+         state.totalPrice = calcTotalPrice(state.items);
+
          // state.totalPrice = state.items.reduce((sum, obj) => {
          //    return obj.price * obj.count - sum;
          // }, 0);
@@ -45,7 +48,6 @@ const basketSlice = createSlice({
    },
 });
 
-export const { totalPrice, totalCount, addItem, removeItem, clearItems, minusItem } =
-   basketSlice.actions;
+export const { addItem, removeItem, clearItems, minusItem } = basketSlice.actions;
 
 export default basketSlice.reducer;

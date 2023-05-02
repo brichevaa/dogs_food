@@ -1,25 +1,28 @@
 import * as echarts from 'echarts';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { fetchSingleProduct } from '../../storageToolkit/singleProduct/singleProductSlice';
 import { fetchProducts } from '../../storageToolkit/products/productsSlice';
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext';
+import { useNavigate } from 'react-router-dom';
 
 export const Chart = () => {
+   const { searchRequest } = useContext(UserContext);
    const { data: products } = useSelector((state) => state.products);
-   // console.log(products);
+
+   const navigate = useNavigate();
+
+   if (searchRequest) {
+      navigate('/catalog');
+   }
 
    const dispatch = useDispatch();
 
-   // const data = products.map((e) => e.reviews.length);
    const dataName = products.map((e) => e.name);
-   // console.log(dataName);
-   // console.log(data);
 
    const rateAcc = products.map((e) =>
       Math.floor(e.reviews.reduce((acc, el) => (acc = acc + el.rating), 0) / e.reviews.length)
    );
-   // console.log(rateAcc);
 
    useEffect(() => {
       dispatch(fetchProducts());

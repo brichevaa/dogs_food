@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './cart.css';
 import { Back } from '../Back/Back';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BasketCardlist } from './BacketCardlist/BasketCardlist';
-import { useContext } from 'react';
-import { CardContext } from '../../context/cardContext';
 import { clearItems } from '../../storageToolkit/basket/basketSlice';
 
 export const Basket = () => {
    const navigate = useNavigate();
-   // const { basketItems } = useContext(CardContext);
    const dispatch = useDispatch();
    const { items } = useSelector((state) => state.basket);
 

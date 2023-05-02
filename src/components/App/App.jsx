@@ -4,8 +4,7 @@ import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 import './App.css';
 import { useDebounce } from '../../utils/utils';
-
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { CatalogPage } from '../../pages/Catalog/CatalogPage';
 import { ProductPage } from '../../pages/Product/ProductPage';
 import { UserContext } from '../../context/userContext';
@@ -13,7 +12,6 @@ import { CardContext } from '../../context/cardContext';
 import { FaqPage } from '../../pages/FAQ/FaqPage';
 import { NotFound } from '../../pages/NotFound/NotFound';
 import { Favorites } from '../../pages/Favorites/Favorites';
-
 import { Modal } from '../Modal/Modal';
 import { Login } from '../Auth/Login/Login';
 import { Register } from '../Auth/Register/Register';
@@ -25,20 +23,22 @@ import { EditAccount } from '../EditAccount/EditAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../storageToolkit/user/userSlice';
 import { fetchProducts, fetchSearchProducts } from '../../storageToolkit/products/productsSlice';
-import { Basket, Cart } from '../Basket/Basket';
+import { Basket } from '../Basket/Basket';
 import { Chart } from '../Chart/Chart';
 import { addItem } from '../../storageToolkit/basket/basketSlice';
+import { BaseButton } from '../BaseButton/BaseButton';
 
 function App() {
    const [cards, setCards] = useState([]);
    const [searchRequest, setSearchRequest] = useState(undefined);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
+
    const { favorites } = useSelector((state) => state.products);
    const { items } = useSelector((state) => state.basket);
    const actualUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
+
    const dispatch = useDispatch(); // dispatch - передает данные
-   // const singleProduct = useSelector((state) => state.product.data);
 
    const isMounted = useRef(false);
 
@@ -158,8 +158,13 @@ function App() {
                   </main>
                ) : (
                   <div className="not-auth">
-                     Пожалуйста, авторизуйтесь.
-                     <Routes>{authRoutes}</Routes>
+                     <div>
+                        Пожалуйста, авторизуйтесь.
+                        <Routes>{authRoutes}</Routes>
+                     </div>
+                     <BaseButton className="not-auth-btn">
+                        <Link to={'/login'}>Войти</Link>
+                     </BaseButton>
                   </div>
                )}
 

@@ -1,28 +1,20 @@
 import './index.css';
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { ReactComponent as Basket } from './busket.svg';
-import { CardContext } from '../../../context/cardContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { addItem, minusItem, removeItem } from '../../../storageToolkit/basket/basketSlice';
 import { useDispatch } from 'react-redux';
+import { ReactComponent as Minus } from './minus.svg';
 
 export const BasketCard = ({ product }) => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
 
-   // const handlePlus = (id) => {
-   //    basketPlusProduct(id);
-   // };
-
    const handlePlus = () => {
       dispatch(addItem({ id: product.id }));
    };
-
-   // const handleMinus = (id) => {
-   //    basketMinusProduct(id);
-   // };
 
    const handleMinus = () => {
       dispatch(minusItem(product.id));
@@ -32,6 +24,7 @@ export const BasketCard = ({ product }) => {
          dispatch(removeItem(id));
       }
    };
+
    return (
       <div className="basket-card">
          <div className="basket-card__wrapper">
@@ -54,18 +47,31 @@ export const BasketCard = ({ product }) => {
             <div className="basket-card__right">
                <div className="basket-card__counter">
                   <div className="basket-card__btns">
-                     <PlusCircleOutlined
+                     <button
+                        onClick={() => handleMinus()}
                         className="btns__basket-card"
-                        onClick={() => handlePlus()}
-                     />
-                     <h1>{product.count}</h1>
-                     <MinusCircleOutlined
+                        disabled={product.count === 1}
+                     >
+                        -
+                     </button>
+                     {/* <MinusCircleOutlined
+                        disabled={product.count === 1}
                         className="btns__basket-card"
                         onClick={() => handleMinus()}
-                     />
+                     />{' '} */}
+                     <h1 className="basket-card__count">{product.count}</h1>
+                     {/* <PlusCircleOutlined
+                        className="btns__basket-card"
+                        onClick={() => handlePlus()}
+                     /> */}
+                     <button onClick={() => handlePlus()} className="btns__basket-card">
+                        +
+                     </button>
                   </div>
                </div>
-               <div>{product.price * product.count} ₽</div>
+               <b>
+                  <div>{product.price * product.count} ₽</div>
+               </b>
             </div>
             <Basket onClick={() => deleteFromBusket(product.id)} className="basket-card__basket" />
          </div>

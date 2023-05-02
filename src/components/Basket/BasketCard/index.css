@@ -2,6 +2,8 @@
    display: flex;
    gap: 20px;
    justify-content: space-between;
+   align-items: center;
+
    /* flex-direction: column; */
 }
 
@@ -16,10 +18,31 @@
 .basket-card__btns {
    display: flex;
    gap: 20px;
+   align-items: center;
 }
 .btns__basket-card {
    cursor: pointer;
+   background-color: transparent;
+   color: black;
+   opacity: 0.6;
+   font-size: 30px;
+   transition: 0.3s;
+}
+.btns__basket-card:hover {
+   opacity: 1;
 }
 .basket-card__basket {
    cursor: pointer;
+}
+.basket-card__count {
+   border: 1px #7b8e98 solid;
+   padding: 10px;
+}
+.basket-card__right {
+   display: flex;
+   align-items: center;
+}
+.basket-card__left {
+   display: flex;
+   align-items: center;
 }

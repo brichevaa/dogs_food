@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { ReactComponent as Save } from './img/save.svg';
 import { useContext, useEffect, useState } from 'react';
 import { api } from '../../utils/api';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Rate } from '../Rate/Rate';
 import { useForm } from 'react-hook-form';
 import { BaseButton } from '../BaseButton/BaseButton';
@@ -15,9 +15,10 @@ import { openNotification } from '../Notification/Notification';
 import { Back } from '../Back/Back';
 import { useDispatch, useSelector } from 'react-redux';
 import { CardContext } from '../../context/cardContext';
-import { Modal } from '../Modal/Modal';
 import { EditProduct } from '../../pages/Product/EditProduct/EditProduct';
-import { addItem, minusItem, totalCount } from '../../storageToolkit/basket/basketSlice';
+import { minusItem } from '../../storageToolkit/basket/basketSlice';
+import { ModalEdit } from '../Modal/ModalEdit/ModalEdit';
+import { UserContext } from '../../context/userContext';
 
 export const Product = ({
    id,
@@ -34,8 +35,7 @@ export const Product = ({
    const [showForm, setShowForm] = useState(false);
    const [modalEditProduct, setModalEditProduct] = useState(false);
    const [isAddedFromProduct, setIsAddedFromProduct] = useState(false);
-   // const [basketCount, setBasketCount] = useState(1);
-   const { totalCount } = useSelector((state) => state.basket);
+   const { searchRequest } = useContext(UserContext);
 
    const {
       register,
@@ -129,6 +129,10 @@ export const Product = ({
       required: 'Это обязательное поле',
    });
 
+   if (searchRequest) {
+      navigate('/catalog');
+   }
+
    return (
       <>
          <div className={s.header}>
@@ -160,22 +164,27 @@ export const Product = ({
                )}
                <div className={s.btnWrap}>
                   <div className={s.left}>
-                     <button className={s.minus} onClick={() => onClickMinus()}>
+                     <button
+                        className={s.minus}
+                        onClick={() => onClickMinus()}
+                        disabled={addedCount === 0}
+                     >
                         -
                      </button>
-                     {addedCount >= 0 && <span className={s.num}>{addedCount}</span>}
+                     {addedCount > -1 && <span className={s.num}>{addedCount}</span>}
                      <button className={s.plus} onClick={() => onClickPlus()}>
                         +
                      </button>
                   </div>
-                  <span
+                  <BaseButton
+                     // disabled={'В корзине'}
                      className={`btn btn_type_primary ${s.cart} ${
                         addedCount ? 'btn_type_primary-active' : 'btn_type_primary'
                      }`}
                      onClick={() => onClickToBasket()}
                   >
-                     {addedCount ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'}
-                  </span>
+                     {addedCount ? 'В корзине' : 'В корзину'}
+                  </BaseButton>
                </div>
                <button
                   className={cn(s.favorite, { [s.favoriteActive]: isLikedProduct })}
@@ -205,7 +214,7 @@ export const Product = ({
                <BaseButton onClick={() => setModalEditProduct(true)} className={s.edit__button}>
                   Редактировать товар
                </BaseButton>
-               <Modal modal={modalEditProduct} setModal={setModalEditProduct}>
+               <ModalEdit modal={modalEditProduct} setModal={setModalEditProduct}>
                   {modalEditProduct && (
                      <EditProduct
                         setModalEditProduct={setModalEditProduct}
@@ -214,7 +223,7 @@ export const Product = ({
                         product={product}
                      />
                   )}
-               </Modal>
+               </ModalEdit>
             </div>
          </div>
 

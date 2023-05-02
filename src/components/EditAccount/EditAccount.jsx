@@ -42,7 +42,7 @@ export const EditAccount = () => {
          {actualUser?.name && actualUser?.about && (
             <div className="edit__wrapper">
                <Form submitForm={handleSubmit(sendProfileData)} className="edit__form">
-                  <div className="edit-account__info">
+                  <div className="edit-account__info edit-account__info-margin">
                      <input
                         {...register('name', required)}
                         defaultValue={actualUser.name}
@@ -79,12 +79,13 @@ export const EditAccount = () => {
                </Form>
                <h2 className="profile__h2">Изменить аватар</h2>
                <Form submitForm={handleSubmit(changeAvatar)} className="edit__avatar">
-                  <div className="profile__avatar">
+                  <div className="profile__avatar profile__avatar-margin">
                      <img
                         src={actualUser.avatar}
                         alt="аватар пользователя"
                         className="profile__avatar-img"
                      />
+
                      <input
                         {...register('avatar')}
                         className="auth__input"

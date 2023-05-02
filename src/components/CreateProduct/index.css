@@ -1,5 +1,17 @@
 .create-product__exit {
    text-align: center;
    margin-top: 20px;
-   margin-left: 370px;
+   margin-left: 475px;
+}
+.create-product__main {
+   display: flex;
+   gap: 20px;
+   justify-content: space-between;
+}
+
+.create-product__input {
+   display: flex;
+   gap: 22px;
+   flex-direction: column;
+   width: 100%;
 }

@@ -5,3 +5,6 @@
 .catalog-page__p {
    font-size: 24px;
 }
+.previous-page {
+   display: inline-block;
+}

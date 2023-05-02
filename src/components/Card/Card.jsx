@@ -68,20 +68,20 @@ export const Card = ({ product, pictures, name, wight, price, discount, onPlus }
             </div>
             <div className="card__description">
                <span className="card__price">{price} ₽</span>
-               <span className="card__wight">{wight}</span>
+               {/* <span className="card__wight">{wight}</span> */}
                <p className="card__name">{name}</p>
             </div>
          </Link>
          <div className="card__buttons">
             <span
                onClick={() => onClickToBasket()}
-               className={`btn btn_type_primary`}
-               // className={`btn btn_type_primary ${
-               //    isAdded ? 'btn_type_primary-active' : 'btn_type_primary'
-               // }`}
+               // className={`btn btn_type_primary`}
+               className={`btn btn_type_primary ${
+                  addedCount ? 'btn_type_primary-active' : 'btn_type_primary'
+               }`}
             >
                {/* {isAdded ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'} */}
-               {/* {isAdded ? 'В корзине' : 'В корзину'} */}В корзину
+               {addedCount ? 'В корзине' : 'В корзину'}
             </span>
             {addedCount > 0 && <span className="added-count">{addedCount}</span>}
             {actualUser._id === product.author._id && (

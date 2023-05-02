@@ -1,12 +1,20 @@
 import { useNavigate } from 'react-router-dom';
 import './main.css';
+import { useContext } from 'react';
+import { UserContext } from '../../context/userContext';
 
 export const MainPage = () => {
+   const { searchRequest } = useContext(UserContext);
+
    const navigate = useNavigate();
 
    const handleClick = () => {
       navigate('/catalog');
    };
+
+   if (searchRequest) {
+      navigate('/catalog');
+   }
    return (
       <>
          <div className="main-page ">
@@ -24,7 +32,8 @@ export const MainPage = () => {
                         src={
                            'https://images.pexels.com/photos/213727/pexels-photo-213727.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
                         }
-                        alt=""
+                        // src="https://images.pexels.com/photos/3153521/pexels-photo-3153521.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        alt="главная картинка"
                         className="img__main-page"
                      />
                   </div>

@@ -43,43 +43,54 @@ export const EditProduct = ({ setModalEditProduct, id, onUpdateProduct, product 
                onClick={() => setModalEditProduct(false)}
                className="create-product__exit"
             />
-            <Form title={'Редактировать товар'} submitForm={handleSubmit(editProduct)}>
+            <Form
+               title={'Редактировать товар'}
+               submitForm={handleSubmit(editProduct)}
+               className="edit__product-form"
+            >
+               <div className="edit__product">
+                  <div>
+                     <img src={product.pictures} alt="фото товара" style={{ width: '200px' }} />
+                  </div>
+                  <div className="edit__product-input">
+                     <input
+                        type="text"
+                        className="auth__input"
+                        placeholder="Название товара"
+                        defaultValue={product.name}
+                        {...register('name', { required: true })}
+                     />
+                     <input
+                        type="number"
+                        className="auth__input"
+                        placeholder="Стоимость"
+                        defaultValue={product.price}
+                        {...register('price', { required: true })}
+                     />
+                     <input
+                        type="text"
+                        className="auth__input"
+                        placeholder="Описание"
+                        defaultValue={product.description}
+                        {...register('description')}
+                     />
+                     <input
+                        type="text"
+                        className="auth__input"
+                        placeholder="Вес"
+                        defaultValue={product.wight}
+                        {...register('wight')}
+                     />
+                  </div>
+               </div>
                <input
                   type="text"
-                  className="auth__input"
-                  placeholder="Название товара"
-                  defaultValue={product.name}
-                  {...register('name', { required: true })}
-               />
-               <input
-                  type="number"
-                  className="auth__input"
-                  placeholder="Стоимость"
-                  defaultValue={product.price}
-                  {...register('price', { required: true })}
-               />
-               <input
-                  type="text"
-                  className="auth__input"
-                  placeholder="Описание"
-                  defaultValue={product.description}
-                  {...register('description')}
-               />
-               <input
-                  type="text"
-                  className="auth__input"
-                  placeholder="Вес"
-                  defaultValue={product.wight}
-                  {...register('wight')}
-               />
-               <input
-                  type="text"
-                  className="auth__input"
+                  className="auth__input auth__input-edit"
                   placeholder="Фото товара"
                   defaultValue={product.pictures}
                   {...register('pictures', { required: true })}
                />
-               <BaseButton color="yellow" type="submit">
+               <BaseButton color="yellow" type="submit" className="edit__product-button">
                   Отправить
                </BaseButton>
             </Form>

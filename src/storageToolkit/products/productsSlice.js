@@ -7,6 +7,7 @@ export const fetchProducts = createAsyncThunk(
       try {
          const { user } = getState();
          const products = await api.getProductList();
+
          return fulfillWithValue({ ...products, user: user.data });
       } catch (error) {
          rejectWithValue(error);
@@ -70,8 +71,10 @@ const initialState = {
    data: [],
    favorites: [],
    loading: false,
-   total: null,
+   total: 0,
    error: null,
+   currentPage: 1,
+   productPerPage: 8,
 };
 
 const productsSlice = createSlice({
@@ -107,6 +110,10 @@ const productsSlice = createSlice({
                break;
          }
       },
+      setCurrentPage: (state, action) => {
+         console.log(action);
+         state.currentPage = action.payload;
+      },
    },
    extraReducers: (builder) => {
       builder.addCase(fetchProducts.pending, (state) => {
@@ -114,11 +121,11 @@ const productsSlice = createSlice({
          state.error = null;
       });
       builder.addCase(fetchProducts.fulfilled, (state, action) => {
-         // console.log(action);
-         const { total, products, user } = action.payload;
+         const { products, user } = action.payload;
          state.data = products.filter((e) => e.author._id === user._id);
          // state.data = products;
-         state.total = total;
+         state.total = action.payload.total ?? 0;
+
          state.favorites = products.filter((e) => findLike(e, user));
          state.loading = false;
       });
@@ -156,6 +163,6 @@ const productsSlice = createSlice({
    },
 });
 
-export const { sortedProducts } = productsSlice.actions;
+export const { sortedProducts, total, setCurrentPage, productPerPage } = productsSlice.actions;
 
 export default productsSlice.reducer;

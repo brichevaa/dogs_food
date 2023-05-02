@@ -1,17 +1,23 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CardList } from '../../components/CardList/CardList';
-import { CardContext } from '../../context/cardContext';
 import { ReactComponent as Notfound } from '../NotFound/notfound.svg';
 import './favorites.css';
 import { Back } from '../../components/Back/Back';
 import { useSelector } from 'react-redux';
+import { UserContext } from '../../context/userContext';
 
 export const Favorites = () => {
+   const { searchRequest } = useContext(UserContext);
+
    const { favorites } = useSelector((state) => state.products);
    console.log(favorites);
 
    const navigate = useNavigate();
+
+   if (searchRequest) {
+      navigate('/catalog');
+   }
 
    return (
       <div className="favorites">
