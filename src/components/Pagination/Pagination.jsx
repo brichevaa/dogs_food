@@ -3,6 +3,7 @@ import './pagination.css';
 
 export const Pagination = ({ productPerPage, totalProducts, paginate }) => {
    const pageNumbers = [];
+
    for (let i = 1; i <= Math.ceil(totalProducts / productPerPage); i++) {
       pageNumbers.push(i);
    }
@@ -16,7 +17,7 @@ export const Pagination = ({ productPerPage, totalProducts, paginate }) => {
                <li className="page-item" key={num}>
                   <span
                      className={`page-link ${
-                        currentPage ? 'page-item__active' : 'page-item__active-none'
+                        currentPage === num ? 'page-item__active' : 'page-item__active-none'
                      }`}
                      onClick={() => paginate(num)}
                   >

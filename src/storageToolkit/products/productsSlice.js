@@ -97,14 +97,6 @@ const productsSlice = createSlice({
                   (a, b) => new Date(b.created_at) - new Date(a.created_at)
                );
                break;
-            // case 'По рейтингу':
-            //    const rateAcc = state.data.map((e) =>
-            //       Math.floor(
-            //          e.reviews.reduce((acc, el) => (acc = acc + el.rating), 0) / e.reviews.length
-            //       )
-            //    );
-            //    state.data = rateAcc.sort((a, b) => b - a);
-            //    break;
             default:
                state.data = state.data.sort((a, b) => b.discount - a.discount);
                break;
