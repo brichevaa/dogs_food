@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { findLike } from '../../utils/utils';
 import './card.css';
@@ -11,19 +11,15 @@ import {
 import { ReactComponent as Basket } from '../Product/img/basket.svg';
 import { openNotification } from '../Notification/Notification';
 
-export const Card = ({ product, pictures, name, wight, price, discount, onPlus }) => {
+export const Card = ({ product, pictures, name, price, discount, onPlus }) => {
    const actualUser = useSelector((state) => state.user.data);
-   // const [isAdded, setIsAdded] = useState(false);
    const dispatch = useDispatch();
    const navigate = useNavigate();
-   // console.log(product);
 
    const cartItem = useSelector((state) =>
       state.basket.items.find((obj) => obj.id === product._id)
    );
    const addedCount = cartItem ? cartItem.count : 0;
-
-   // console.log(product);
 
    const isLiked = findLike(product, actualUser);
    const handleLikeClick = () => {
@@ -44,7 +40,6 @@ export const Card = ({ product, pictures, name, wight, price, discount, onPlus }
 
    const onClickToBasket = () => {
       onPlus(product);
-      // setIsAdded(!isAdded);
    };
 
    return (
@@ -68,19 +63,16 @@ export const Card = ({ product, pictures, name, wight, price, discount, onPlus }
             </div>
             <div className="card__description">
                <span className="card__price">{price} ₽</span>
-               {/* <span className="card__wight">{wight}</span> */}
                <p className="card__name">{name}</p>
             </div>
          </Link>
          <div className="card__buttons">
             <span
                onClick={() => onClickToBasket()}
-               // className={`btn btn_type_primary`}
                className={`btn btn_type_primary ${
                   addedCount ? 'btn_type_primary-active' : 'btn_type_primary'
                }`}
             >
-               {/* {isAdded ? <Link to={'/cart'}>В корзине</Link> : 'В корзину'} */}
                {addedCount ? 'В корзине' : 'В корзину'}
             </span>
             {addedCount > 0 && <span className="added-count">{addedCount}</span>}

@@ -9,7 +9,6 @@ export const Rate = ({ rating, setRating, currentRating, isEdit = false }) => {
    const [rate, setRate] = useState(emptyFragments);
 
    const changeStar = (rating) => {
-      // setRating(rating);
       if (!isEdit) return;
       constructRating(rating);
    };

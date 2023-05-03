@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import './index.css';
 import { CardList } from '../../components/CardList/CardList';
 import { UserContext } from '../../context/userContext';

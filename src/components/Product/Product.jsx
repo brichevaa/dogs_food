@@ -54,8 +54,6 @@ export const Product = ({
 
    const { onAddToBusket } = useContext(CardContext);
 
-   console.log({ product });
-
    const sendReview = async (data) => {
       try {
          const newProduct = await api.addReview(product._id, { text: data.review, rating: rating });
@@ -177,7 +175,6 @@ export const Product = ({
                      </button>
                   </div>
                   <BaseButton
-                     // disabled={'В корзине'}
                      className={`btn btn_type_primary ${s.cart} ${
                         addedCount ? 'btn_type_primary-active' : 'btn_type_primary'
                      }`}
@@ -259,7 +256,6 @@ export const Product = ({
             <BaseButton onClick={() => setShowForm(true)} className={s.review__btn}>
                Написать отзыв
             </BaseButton>
-
             {showForm && (
                <FormReviews submitForm={handleSubmit(sendReview)} className={s.review__submit}>
                   {/* <span className={s.naming}>Оставьте ваш отзыв ниже в специальном поле</span> */}

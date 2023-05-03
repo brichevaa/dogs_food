@@ -238,5 +238,29 @@
       "available": true,
       "stock": 10,
       "picture": "https://cdn.shopify.com/s/files/1/0150/6262/files/the-sill_LargeStromantheTriostar_Large_Helenaplanter-Cream_variant.jpg?v=1682361227"
+   },
+   {
+      "name": "Хойя трехцветная",
+      "price": 3299,
+      "discount": 10,
+      "wight": "100 г",
+      "description": "Хойя трехцветная",
+      "isFavorite": true,
+      "isCart": false,
+      "available": true,
+      "stock": 10,
+      "picture": "https://cdn.shopify.com/s/files/1/0150/6262/products/The-Sill_HoyaCarnosa_Small_Grant_Terracotta_Variant.jpg?v=1671488315"
+   },
+   {
+      "name": "Мини-стена живая",
+      "price": 2299,
+      "discount": 10,
+      "wight": "100 г",
+      "description": "Мини-стена живая",
+      "isFavorite": true,
+      "isCart": false,
+      "available": true,
+      "stock": 10,
+      "picture": "https://cdn.shopify.com/s/files/1/0150/6262/products/the-sill_living-moss-wall_featured.jpg?v=1572540058"
    }
 ]

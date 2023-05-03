@@ -1,11 +1,8 @@
 import './index.css';
 import { BasketCard } from '../BasketCard/BasketCard';
-import { useContext } from 'react';
-import { CardContext } from '../../../context/cardContext';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export const BasketCardlist = () => {
-   // const totalPrice = basketItems.reduce((sum, product) => product.priceTotal + sum, 0);
    const { items, totalPrice } = useSelector((state) => state.basket);
 
    return (

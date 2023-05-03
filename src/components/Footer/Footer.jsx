@@ -1,4 +1,3 @@
-import { Logo } from '../Header/Logo/Logo';
 import './footer.css';
 import logoTelegram from './telegram.svg';
 import logoWhatsapp from './whatsapp.svg';
@@ -11,14 +10,11 @@ import { Link } from 'react-router-dom';
 import { ReactComponent as Flora } from '../Header/Logo/flora.svg';
 
 export const Footer = () => {
-   const user = useContext(UserContext);
-
    return (
       <div className="footer">
          <div className="container">
             <div className="footer__contact contact-hero">
                <div className="contact-hero__item-one">
-                  {/* <Logo /> */}
                   <Link to={'/'} className="flora">
                      <Flora />
                   </Link>

@@ -23,7 +23,6 @@ export const Login = ({ setModal }) => {
    const sendData = async (data) => {
       try {
          const res = await authApi.login(data);
-         // console.log(res);
          localStorage.setItem('token', res.token);
          navigate('/catalog');
       } catch (error) {

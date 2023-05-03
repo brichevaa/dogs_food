@@ -63,14 +63,8 @@ export const CreateProduct = ({ setModalCreateProduct }) => {
                         type="text"
                         className="auth__input"
                         placeholder="Описание"
-                        {...register('description')}
+                        {...register('description', { required: true })}
                      />
-                     {/* <input
-                        type="text"
-                        className="auth__input"
-                        placeholder="Вес"
-                        {...register('wight')}
-                     /> */}
                   </div>
                </div>
                <input

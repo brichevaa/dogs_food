@@ -1,11 +1,8 @@
-import { useContext } from 'react';
 import './index.css';
 import { Back } from '../Back/Back';
 import { BaseButton } from '../BaseButton/BaseButton';
 import { Form } from '../Form/Form';
 import { useForm } from 'react-hook-form';
-import { api } from '../../utils/api';
-import { openNotification } from '../Notification/Notification';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeUser } from '../../storageToolkit/user/userSlice';
 

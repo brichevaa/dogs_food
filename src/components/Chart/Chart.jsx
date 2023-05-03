@@ -36,8 +36,6 @@ export const Chart = () => {
          tooltip: {},
          xAxis: {
             data: dataName,
-            // data: [5, 20, 36, 50, 55, 20, 8, 20],
-
             type: 'category',
          },
          yAxis: { type: 'value' },
@@ -45,7 +43,6 @@ export const Chart = () => {
             {
                name: 'sales',
                type: 'bar',
-               // data: [5, 20, 36, 50, 55, 20],
                data: rateAcc,
                colorBy: 'sales',
             },

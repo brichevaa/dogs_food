@@ -11,7 +11,6 @@ export const Pagination = ({ productPerPage, totalProducts, paginate }) => {
 
    return (
       <div className="pagination">
-         {/* <button className="pagination__array">{'<<'}</button> */}
          <ul className="pagination__ul">
             {pageNumbers.map((num) => (
                <li className="page-item" key={num}>
@@ -26,9 +25,6 @@ export const Pagination = ({ productPerPage, totalProducts, paginate }) => {
                </li>
             ))}
          </ul>
-         {/* <button className="pagination__array" onClick={() => nextPage()}>
-            {'>>'}
-         </button> */}
-      </div>
+            </div>
    );
 };
