@@ -1,0 +1,10 @@
+.basket-cards {
+   display: flex;
+   flex-direction: column;
+   gap: 20px;
+   margin: 20px 0px 0px 0px;
+}
+.favorites__h1-right {
+   text-align: right;
+   font-size: 20px;
+}

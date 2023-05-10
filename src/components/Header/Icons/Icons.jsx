@@ -1,46 +1,52 @@
-import logoDog from './dog.svg';
-import logoFavorite from './favorites.svg';
-import logoPath from './path.svg';
 import './icons.css';
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
-import { CardContext } from '../../../context/cardContext';
 import { UserContext } from '../../../context/userContext';
 import { useSelector } from 'react-redux';
-import { Modal } from '../../Modal/Modal';
 import { CreateProduct } from '../../CreateProduct/CreateProduct';
-import { BaseButton } from '../../BaseButton/BaseButton';
+import { UserOutlined } from '@ant-design/icons';
+import { HeartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined } from '@ant-design/icons';
+import { CardContext } from '../../../context/cardContext';
+import { ModalEdit } from '../../Modal/ModalEdit/ModalEdit';
 
-export const Icons = ({ count, setModal, modal }) => {
-   const { isAuth } = useContext(UserContext);
-   const { favorites } = useSelector((state) => state.products);
+export const Icons = () => {
    const [modalCreateProduct, setModalCreateProduct] = useState(false);
+
+   const { isAuth } = useContext(UserContext);
+   const { setModal } = useContext(CardContext);
+
+   const { favorites } = useSelector((state) => state.products);
+   const { items } = useSelector((state) => state.basket);
+
+   const totalCount = items.reduce((sum, item) => sum + item.count, 0);
 
    return (
       <>
          <Link to={'/favorites'} className="header__bubble-link">
-            <img src={logoFavorite} alt="лого лайк" className="logo__icons" />
+            <HeartOutlined />
             {favorites.length !== 0 && <span className="header__bubble">{favorites.length}</span>}
          </Link>
+
          <Link to={'/cart'} className="header__bubble-link">
-            <img src={logoPath} alt="лого корзина" className="logo__icons" />
-            {count !== 0 && <span className="header__bubble">{count}</span>}
+            <ShoppingCartOutlined />
+            {items.length !== 0 && isAuth && <span className="header__bubble">{totalCount}</span>}
          </Link>
          {isAuth ? (
             <Link to={'/profile'} onClick={() => setModal(true)}>
-               <img src={logoDog} alt="лого собака" className="logo__icons" />
+               <UserOutlined className="logo__icons" />
             </Link>
          ) : (
             <Link to={'/login'} onClick={() => setModal(true)}>
-               <img src={logoDog} alt="лого собака" className="logo__icons" />
+               <UserOutlined className="logo__icons" />
             </Link>
          )}
          <span onClick={() => setModalCreateProduct(true)} className="create-product__header">
-            Добавить продукт
+            +Продукт
          </span>
-         <Modal modal={modalCreateProduct} setModal={setModalCreateProduct}>
+         <ModalEdit modal={modalCreateProduct} setModal={setModalCreateProduct}>
             {modalCreateProduct && <CreateProduct setModalCreateProduct={setModalCreateProduct} />}
-         </Modal>
+         </ModalEdit>
       </>
    );
 };

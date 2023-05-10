@@ -1,4 +1,3 @@
-import { Logo } from '../Header/Logo/Logo';
 import './footer.css';
 import logoTelegram from './telegram.svg';
 import logoWhatsapp from './whatsapp.svg';
@@ -8,20 +7,18 @@ import logoVK from './vk.svg';
 import { useContext } from 'react';
 import { UserContext } from '../../context/userContext';
 import { Link } from 'react-router-dom';
+import { ReactComponent as Flora } from '../Header/Logo/flora.svg';
 
 export const Footer = () => {
-   const user = useContext(UserContext);
-
    return (
       <div className="footer">
          <div className="container">
             <div className="footer__contact contact-hero">
                <div className="contact-hero__item-one">
-                  <Logo />
-
-                  <div className="footer__c">
-                     © «Интернет-магазин DogFood.ru»
-                  </div>
+                  <Link to={'/'} className="flora">
+                     <Flora />
+                  </Link>
+                  <div className="footer__c">© «Интернет-магазин flora-shop.ru»</div>
                </div>
                <div className="contact-hero__item">
                   <div className="footer__title">
@@ -62,7 +59,7 @@ export const Footer = () => {
                   <h3>
                      <b>8 (999) 00-00-00</b>
                   </h3>
-                  <p>dogfood.ru@gmail.com</p>
+                  <p>flora-shop@gmail.com</p>
                   <div className="contact-hero__icons ">
                      <a href="/">
                         <img src={logoTelegram} alt="logo telegram" />

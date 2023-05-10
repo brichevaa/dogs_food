@@ -4,13 +4,15 @@
    flex-direction: column;
    /* align-items: flex-start; */
    padding: 10px;
-   border-radius: 10px;
+   /* border-radius: 10px; */
    justify-content: space-between;
    margin: 0px 0px 60px 0px;
+   transition: all 0.3s ease-in-out 0s;
 }
 
 .card:hover {
    box-shadow: 0 2px 4px rgba(40, 41, 61, 0.04), 0 8px 16px rgba(96, 97, 112, 0.16);
+   transform: scale(1.04);
 }
 
 .card:focus-within {
@@ -29,6 +31,8 @@
    object-fit: contain;
    margin-bottom: 16px;
 }
+.card__body {
+}
 
 .card__old-price {
    font-size: 12px;
@@ -45,7 +49,7 @@
 .card__price {
    font-size: 20px;
    line-height: 24px;
-   font-weight: 800;
+   font-weight: 700;
    display: block;
    margin-bottom: 6px;
 }
@@ -120,22 +124,26 @@
 .btn {
    padding: 10px 18px;
    font-size: 16px;
-   font-weight: 700;
+   font-weight: 400;
    line-height: 20px;
-   border-radius: 55px;
+   /* border-radius: 55px; */
    text-decoration: none;
    display: inline-block;
    transition: background-color 0.3s;
-   font-family: 'Nunito';
+   cursor: pointer;
+   text-align: center;
 }
 
 .btn_type_primary {
-   background-color: #ffe44d;
-   color: black;
+   background-color: #99c27c;
 }
 .btn_type_primary:hover {
-   background-color: #ffaa0d;
-   color: #f44336;
+   background-color: #6f8f57;
+   /* color: white; */
+}
+.btn_type_primary-active {
+   background-color: #6f8f57;
+   color: white;
 }
 
 .tag {
@@ -165,4 +173,11 @@
    display: flex;
    justify-content: space-between;
    align-items: center;
+}
+.card__basket {
+   cursor: pointer;
+}
+.added-count {
+   border: 1px solid #7b8e98;
+   padding: 11px;
 }

@@ -2,23 +2,24 @@
 }
 .auth__input {
    padding: 14px 16px;
-   border-radius: 12px;
+   /* border-radius: 12px; */
    border: 1px solid #cfd8dc;
    font-size: 16px;
    line-height: 20px;
-   font-family: Nunito;
+   font-family: Montserrat;
    max-height: 3rem;
    /* color: #7b8e98; */
 }
 .auth__input:hover,
 .auth__input:focus {
-   border-color: #ffe44d;
-   caret-color: #ffe44d;
+   border-color: #6f8f57;
+   caret-color: #6f8f57;
 }
 .auth__controls {
    display: flex;
    flex-direction: column;
    gap: 1.5rem;
+   width: 100%;
 }
 .auth__remove-password {
    color: #7b8e98;

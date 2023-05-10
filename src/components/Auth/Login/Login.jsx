@@ -23,7 +23,6 @@ export const Login = ({ setModal }) => {
    const sendData = async (data) => {
       try {
          const res = await authApi.login(data);
-         // console.log(res);
          localStorage.setItem('token', res.token);
          navigate('/catalog');
       } catch (error) {
@@ -46,12 +45,7 @@ export const Login = ({ setModal }) => {
       <>
          <Form submitForm={handleSubmit(sendData)} title="Вход">
             <div className="auth__controls">
-               <input
-                  type="text"
-                  placeholder="Email"
-                  className="auth__input"
-                  {...emailRegister}
-               />
+               <input type="text" placeholder="Email" className="auth__input" {...emailRegister} />
                {errors?.email && (
                   <span
                      style={{
@@ -80,10 +74,7 @@ export const Login = ({ setModal }) => {
                      {errors.password?.message}
                   </span>
                )}
-               <span
-                  className="auth__remove-password"
-                  onClick={() => navigate('/remove-password')}
-               >
+               <span className="auth__remove-password" onClick={() => navigate('/remove-password')}>
                   Восстановить пароль
                </span>
                <BaseButton type="submit" color="yellow">

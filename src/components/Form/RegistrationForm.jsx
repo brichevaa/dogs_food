@@ -9,9 +9,7 @@ export const RegistrationForm = ({ sendData }) => {
    } = useForm();
    const onSubmit = (data) => {
       console.log(data);
-      // sendData(data);
    };
-   // console.log({ errors });
 
    const nameRegister = {
       required: {

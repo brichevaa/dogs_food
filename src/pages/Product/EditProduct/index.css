@@ -1,0 +1,28 @@
+.edit__product {
+   display: flex;
+   gap: 20px;
+   justify-content: space-between;
+}
+.edit__product-input {
+   display: flex;
+   gap: 22px;
+   flex-direction: column;
+   width: 100%;
+}
+.edit__product-form {
+   /* width: 800px; */
+}
+.edit__product-button {
+   padding: 14px 80px;
+}
+.auth__input-edit {
+   width: 100%;
+}
+/* .auth__input {
+   padding: 14px 16px;
+   border: 1px solid #cfd8dc;
+   font-size: 16px;
+   line-height: 20px;
+   font-family: Montserrat;
+   max-height: 3rem;
+} */

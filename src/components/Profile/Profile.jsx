@@ -9,7 +9,7 @@ import { BaseButton } from '../BaseButton/BaseButton';
 import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
-   const { currentUser } = useContext(UserContext);
+   const { actualUser } = useContext(UserContext);
 
    const navigate = useNavigate();
 
@@ -29,9 +29,9 @@ export const Profile = () => {
             <h1 className="profile__h1">Профиль</h1>
             <div className="profile__info">
                <FontAwesomeIcon icon={faUser} />
-               <h2 className="profile__h2">{currentUser.name}</h2>
+               <h2 className="profile__h2">{actualUser.name}</h2>
                <img src={Mail} alt="" className="profile__logo-mail" />
-               <span>{currentUser.email}</span>
+               <span>{actualUser.email}</span>
             </div>
             <BaseButton className="profile__button-change" onClick={handleClick}>
                Изменить

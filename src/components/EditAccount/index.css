@@ -11,9 +11,11 @@
 } */
 .edit__form {
    padding: 0px 0px;
+   display: inline-block;
 }
 .edit__avatar {
    padding: 0px 0px;
+   display: inline-block;
 }
 .edit__wrapper {
    display: flex;
@@ -38,4 +40,10 @@
 }
 .profile__avatar .auth__input {
    max-height: 2.5 rem;
+}
+.edit-account__info-margin {
+   margin: 30px 0px 30px 0px;
+}
+.profile__avatar-margin {
+   margin: 0px 0px 30px 0px;
 }

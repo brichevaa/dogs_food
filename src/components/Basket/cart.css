@@ -1,0 +1,27 @@
+.basket {
+   margin: 20px 0px 20px 0px;
+}
+.basket-card__left {
+   display: flex;
+   gap: 40px;
+   min-width: 500px;
+}
+.basket-card__right {
+   display: flex;
+   gap: 40px;
+}
+.basket__header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+}
+.basket__clear {
+   cursor: pointer;
+   /* border: 1px solid #7b8e98; */
+   color: #7b8e98;
+   padding: 8px;
+}
+.basket__clear:hover {
+   color: black;
+   transition: 0.3s;
+}

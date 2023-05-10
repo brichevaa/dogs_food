@@ -1,12 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { BaseButton } from '../BaseButton/BaseButton';
 import { Form } from '../Form/Form';
-import { api } from '../../utils/api';
 import { openNotification } from '../Notification/Notification';
-import { useContext } from 'react';
-import { CardContext } from '../../context/cardContext';
 import './index.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchAddProducts } from '../../storageToolkit/products/productsSlice';
 import { useNavigate } from 'react-router-dom';
 import { CloseOutlined } from '@ant-design/icons';
@@ -19,15 +16,13 @@ export const CreateProduct = ({ setModalCreateProduct }) => {
    } = useForm({ mode: 'onSubmit' });
 
    const navigate = useNavigate();
-
-   const { cards, setCards } = useContext(CardContext);
+   const dispatch = useDispatch();
 
    const createProduct = async (data) => {
       console.log({ data });
       try {
-         const result = await api.addProduct({ ...data });
+         dispatch(fetchAddProducts(data));
          navigate('/catalog');
-         setCards([...cards, result]);
          setModalCreateProduct(false);
          openNotification('success', 'Успешно!', 'Ваш товар успешно добавлен');
       } catch (error) {
@@ -43,27 +38,38 @@ export const CreateProduct = ({ setModalCreateProduct }) => {
                className="create-product__exit"
             />
             <Form title={'Создать товар'} submitForm={handleSubmit(createProduct)}>
+               <div className="create-product__main">
+                  <div>
+                     <img
+                        src={'https://asialedspartnership.org/default/image/default-image.jpg'}
+                        alt="фото товара"
+                        style={{ width: '200px' }}
+                     />
+                  </div>
+                  <div className="create-product__input">
+                     <input
+                        type="text"
+                        className="auth__input"
+                        placeholder="Название товара"
+                        {...register('name', { required: true })}
+                     />
+                     <input
+                        type="number"
+                        className="auth__input"
+                        placeholder="Стоимость"
+                        {...register('price', { required: true })}
+                     />
+                     <input
+                        type="text"
+                        className="auth__input"
+                        placeholder="Описание"
+                        {...register('description', { required: true })}
+                     />
+                  </div>
+               </div>
                <input
                   type="text"
-                  className="auth__input"
-                  placeholder="Название товара"
-                  {...register('name', { required: true })}
-               />
-               <input
-                  type="number"
-                  className="auth__input"
-                  placeholder="Стоимость"
-                  {...register('price', { required: true })}
-               />
-               <input
-                  type="text"
-                  className="auth__input"
-                  placeholder="Описание"
-                  {...register('description')}
-               />
-               <input
-                  type="text"
-                  className="auth__input"
+                  className="auth__input auth__input-edit"
                   placeholder="Фото товара"
                   {...register('pictures', { required: true })}
                />

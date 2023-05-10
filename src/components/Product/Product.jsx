@@ -3,9 +3,8 @@ import truck from './img/truck.svg';
 import quality from './img/quality.svg';
 import cn from 'classnames';
 import { ReactComponent as Save } from './img/save.svg';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { api } from '../../utils/api';
-import { findLike } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
 import { Rate } from '../Rate/Rate';
 import { useForm } from 'react-hook-form';
@@ -14,14 +13,30 @@ import { FormReviews } from '../FormReviews/FormReviews';
 import { ReactComponent as Basket } from './img/basket.svg';
 import { openNotification } from '../Notification/Notification';
 import { Back } from '../Back/Back';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { CardContext } from '../../context/cardContext';
+import { EditProduct } from '../../pages/Product/EditProduct/EditProduct';
+import { minusItem } from '../../storageToolkit/basket/basketSlice';
+import { ModalEdit } from '../Modal/ModalEdit/ModalEdit';
+import { UserContext } from '../../context/userContext';
 
-export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLike }) => {
+export const Product = ({
+   id,
+   product,
+   onSendReview,
+   onDeleteReview,
+   onProductLike,
+   onUpdateProduct,
+}) => {
    const [rating, setRating] = useState(3);
    const [currentRating, setCurrentRating] = useState(0);
    const [reviewsProduct, setReviewsProduct] = useState(product.reviews.slice(0, 3) ?? []);
    const [users, setUsers] = useState([]);
    const [showForm, setShowForm] = useState(false);
+   const [modalEditProduct, setModalEditProduct] = useState(false);
+   const [isAddedFromProduct, setIsAddedFromProduct] = useState(false);
+   const { searchRequest } = useContext(UserContext);
+
    const {
       register,
       handleSubmit,
@@ -29,7 +44,15 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
       reset,
    } = useForm({ mode: 'onSubmit' });
 
-   const currentUser = useSelector((state) => state.user.data);
+   const actualUser = useSelector((state) => state.user.data);
+   const dispatch = useDispatch();
+   const navigate = useNavigate();
+   const cartItem = useSelector((state) =>
+      state.basket.items.find((obj) => obj.id === product._id)
+   );
+   const addedCount = cartItem ? cartItem.count : 0;
+
+   const { onAddToBusket } = useContext(CardContext);
 
    const sendReview = async (data) => {
       try {
@@ -58,12 +81,10 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
       setReviewsProduct([...product.reviews]);
    };
 
-   const navigate = useNavigate();
-
    const [isLikedProduct, setIsLikedProduct] = useState(false);
 
    useEffect(() => {
-      const isLiked = product?.likes?.some((el) => el === currentUser._id);
+      const isLiked = product?.likes?.some((el) => el === actualUser._id);
       setIsLikedProduct(isLiked);
    }, [product.likes]);
 
@@ -71,36 +92,29 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
       api.getUsers().then((data) => setUsers(data));
    }, []);
 
-   const getUser = (id) => {
-      // console.log(id);
-      if (!users.length) return 'User';
-      const user = users.find((e) => e._id === id);
-      // console.log(user);
-      if (user?.avatar.includes('default-image')) {
-         return {
-            ...user,
-            avatar:
-               'https://avatars.mds.yandex.net/i?id=e67c20f98bdc512c5d3bc20c140f8fac-5719595-images-taas-consumers&n=27&h=480&w=480',
-         };
-      }
+   const onClickToBasket = () => {
+      onAddToBusket(product);
+      // setIsAddedFromProduct(!isAddedFromProduct);
+   };
 
-      return user;
+   const onClickPlus = () => {
+      onAddToBusket(product);
+      // dispatch(addItem({ id: product._id }));
+   };
+   const onClickMinus = () => {
+      dispatch(minusItem(product._id));
    };
 
    useEffect(() => {
       if (!product?.reviews) return;
       const rateAcc = product.reviews.reduce((acc, el) => (acc = acc + el.rating), 0);
-      // console.log({ rateAcc });
       const sum = Math.floor(rateAcc / product.reviews.length);
       setRating(sum);
       setCurrentRating(sum);
    }, [product?.reviews]);
 
-   // console.log(currentRating);
-
    const onLike = () => {
       onProductLike(product);
-      // setIsLikedProduct((state) => !state);
    };
 
    const options = {
@@ -112,6 +126,10 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
    const textRegister = register('review', {
       required: 'Это обязательное поле',
    });
+
+   if (searchRequest) {
+      navigate('/catalog');
+   }
 
    return (
       <>
@@ -144,13 +162,26 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                )}
                <div className={s.btnWrap}>
                   <div className={s.left}>
-                     <button className={s.minus}>-</button>
-                     <span className={s.num}>0</span>
-                     <button className={s.plus}>+</button>
+                     <button
+                        className={s.minus}
+                        onClick={() => onClickMinus()}
+                        disabled={addedCount === 0}
+                     >
+                        -
+                     </button>
+                     {addedCount > -1 && <span className={s.num}>{addedCount}</span>}
+                     <button className={s.plus} onClick={() => onClickPlus()}>
+                        +
+                     </button>
                   </div>
-                  <a href="/#" className={`btn btn_type_primary ${s.cart}`}>
-                     В корзину
-                  </a>
+                  <BaseButton
+                     className={`btn btn_type_primary ${s.cart} ${
+                        addedCount ? 'btn_type_primary-active' : 'btn_type_primary'
+                     }`}
+                     onClick={() => onClickToBasket()}
+                  >
+                     {addedCount ? 'В корзине' : 'В корзину'}
+                  </BaseButton>
                </div>
                <button
                   className={cn(s.favorite, { [s.favoriteActive]: isLikedProduct })}
@@ -177,6 +208,19 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                      </p>
                   </div>
                </div>
+               <BaseButton onClick={() => setModalEditProduct(true)} className={s.edit__button}>
+                  Редактировать товар
+               </BaseButton>
+               <ModalEdit modal={modalEditProduct} setModal={setModalEditProduct}>
+                  {modalEditProduct && (
+                     <EditProduct
+                        setModalEditProduct={setModalEditProduct}
+                        id={id}
+                        onUpdateProduct={onUpdateProduct}
+                        product={product}
+                     />
+                  )}
+               </ModalEdit>
             </div>
          </div>
 
@@ -186,10 +230,10 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
             <h2 className={s.title}>Характеристики</h2>
             <div className={s.grid}>
                <div className={s.naming}>Вес</div>
-               <div className={s.description}>{product.wight}</div>
+               <div className={s.description}>{product.wight} г</div>
                <div className={s.naming}>Цена</div>
-               <div className={s.description}>{product.price} ₽ за 100 грамм</div>
-               <div className={s.naming}>Польза</div>
+               <div className={s.description}>{product.price} ₽</div>
+               <div className={s.naming}>Руководство по уходу</div>
                <div className={s.description}>
                   <p>
                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem quas sapiente
@@ -212,7 +256,6 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
             <BaseButton onClick={() => setShowForm(true)} className={s.review__btn}>
                Написать отзыв
             </BaseButton>
-
             {showForm && (
                <FormReviews submitForm={handleSubmit(sendReview)} className={s.review__submit}>
                   {/* <span className={s.naming}>Оставьте ваш отзыв ниже в специальном поле</span> */}
@@ -222,7 +265,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                      className={s.textarea}
                      placeholder="Оставьте ваш отзыв"
                   />
-                  <BaseButton type="submit" color="yellow" style={{ width: '200px' }}>
+                  <BaseButton
+                     type="submit"
+                     style={{ width: '200px' }}
+                     className="btn btn_type_primary"
+                  >
                      Отправить отзыв
                   </BaseButton>
                </FormReviews>
@@ -237,11 +284,11 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                         <div className={s.reviews__author}>
                            <div className={s.reviews__info}>
                               <img
-                                 src={getUser(r.author)?.avatar}
+                                 src={r.author.avatar}
                                  alt="avatar"
                                  className={s.reviews__avatar}
                               />
-                              <span>{`${getUser(r.author)?.name ?? 'User'} `}</span>
+                              <span className={s.author_name}>{r.author.name ?? 'User'}</span>
                               <span className={s.reviews__date}>
                                  {new Date(r.created_at).toLocaleString('ru', options)}
                               </span>
@@ -250,7 +297,7 @@ export const Product = ({ id, product, onSendReview, onDeleteReview, onProductLi
                         </div>
                         <div className={s.reviews__text}>
                            <span>{r.text}</span>
-                           {currentUser._id === r.author && (
+                           {actualUser._id === r.author._id && (
                               <Basket
                                  onClick={() => deleteReview(r._id)}
                                  className={s.basketIcon}

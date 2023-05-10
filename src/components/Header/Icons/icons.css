@@ -1,7 +1,8 @@
 .header__bubble {
-   background-color: #01a54e;
-   color: white;
-   font-size: 9px;
+   /* background-color: #01a54e; */
+   background-color: #fff;
+   color: rgb(48, 47, 47);
+   font-size: 12px;
    font-weight: 700;
    width: 22px;
    height: 22px;
@@ -13,7 +14,7 @@
    justify-content: center;
    align-items: center;
    padding: 2px;
-   border: 3px solid #ffe44d;
+   /* border: 3px solid #ffe44d; */
 }
 .header__bubble-link {
    text-decoration: none;
@@ -21,11 +22,10 @@
 }
 .create-product__header {
    display: inline-block;
-   background-color: #ffe867;
-   box-shadow: 0 2px 4px rgba(97, 87, 62, 0.04), 0 8px 16px rgba(116, 100, 88, 0.16);
-
+   font-weight: normal;
+   background-color: #99c27c;
    padding: 10px;
-   border-radius: 10px;
+   /* border-radius: 10px; */
    text-align: right;
    font-size: 16px;
    cursor: pointer;
@@ -33,6 +33,16 @@
    /* color: #4f4b44; */
 }
 .create-product__header:hover {
-   background-color: #ffaa0d;
-   color: #f44336;
+   background-color: #6f8f57;
 }
+/* .btn-main {
+   font-size: 20px;
+   padding: 16px 28px 16px 28px;
+   margin: 40px 0px 0px 0px;
+   cursor: pointer;
+   background-color: #99c27c;
+   color: white;
+}
+.btn-main:hover {
+   background-color: #6f8f57;
+} */

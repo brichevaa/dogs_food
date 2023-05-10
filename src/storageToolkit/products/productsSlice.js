@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchUser } from '../user/userSlice';
-import { findLike } from '../../utils/utils';
+import { filteredCards, findLike } from '../../utils/utils';
 
 export const fetchProducts = createAsyncThunk(
    'products/fetchProducts',
-   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+   async function (_, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
       try {
          const { user } = getState();
          const products = await api.getProductList();
+
          return fulfillWithValue({ ...products, user: user.data });
       } catch (error) {
          rejectWithValue(error);
@@ -17,10 +17,11 @@ export const fetchProducts = createAsyncThunk(
 
 export const fetchAddProducts = createAsyncThunk(
    'products/fetchAddProducts',
-   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
+   async function (dataOutside, { fulfillWithValue, rejectWithValue, extra: api }) {
       try {
-         const products = await api.addProduct(dataOutside);
-         return fulfillWithValue(products);
+         const addedProduct = await api.addProduct({ ...dataOutside });
+         console.log(addedProduct);
+         return fulfillWithValue(addedProduct);
       } catch (error) {
          rejectWithValue(error);
       }
@@ -55,10 +56,11 @@ export const fetchChangeLikeProduct = createAsyncThunk(
    'products/fetchChangeLikeProduct',
    async function (product, { fulfillWithValue, rejectWithValue, extra: api, getState }) {
       try {
-         const { user } = getState();
+         const { user, product: singleProduct } = getState();
+         // fixme - refactor -> take from inside
          const wasLiked = findLike(product, user.data);
          const data = await api.changeLikeProductStatus(product._id, wasLiked);
-         return fulfillWithValue({ product: data, wasLiked: wasLiked });
+         return fulfillWithValue({ product: data, wasLiked: wasLiked, singleProduct, user });
       } catch (error) {
          rejectWithValue(error);
       }
@@ -69,8 +71,10 @@ const initialState = {
    data: [],
    favorites: [],
    loading: false,
-   total: null,
+   total: 0,
    error: null,
+   currentPage: 1,
+   productPerPage: 8,
 };
 
 const productsSlice = createSlice({
@@ -98,6 +102,10 @@ const productsSlice = createSlice({
                break;
          }
       },
+      setCurrentPage: (state, action) => {
+         console.log(action);
+         state.currentPage = action.payload;
+      },
    },
    extraReducers: (builder) => {
       builder.addCase(fetchProducts.pending, (state) => {
@@ -105,36 +113,48 @@ const productsSlice = createSlice({
          state.error = null;
       });
       builder.addCase(fetchProducts.fulfilled, (state, action) => {
-         const { total, products, user } = action.payload;
-         state.data = products;
-         state.total = total;
+         const { products, user } = action.payload;
+         state.data = products.filter((e) => e.author._id === user._id);
+         // state.data = products;
+         state.total = action.payload.total ?? 0;
+
          state.favorites = products.filter((e) => findLike(e, user));
          state.loading = false;
       });
       builder.addCase(fetchChangeLikeProduct.fulfilled, (state, action) => {
          state.loading = false;
          state.error = null;
-         const { product, wasLiked } = action.payload;
+         const { product, wasLiked, singleProduct, user } = action.payload;
          state.data = state.data.map((e) => {
             return e._id === product._id ? product : e;
          });
          if (!wasLiked) {
             state.favorites.push(product);
+            // singleProduct = {...singleProduct, likes: [...singleProduct.likes, user.data._id]}
          } else {
             state.favorites = state.favorites.filter((e) => e._id !== product._id);
+            // singleProduct.product = {...singleProduct.product, likes: singleProduct.product.likes.filter(e => e !== user.data._id)}
          }
       });
+      builder.addCase(fetchSearchProducts.pending, (state) => {
+         state.loading = true;
+         state.error = null;
+      });
       builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
-         state.data = action.payload;
+         state.data = filteredCards(action.payload);
          state.loading = false;
       });
       builder.addCase(fetchAddProducts.fulfilled, (state, action) => {
-         state.data = action.payload;
+         state.data = [...state.data, action.payload];
+         state.loading = false;
+      });
+      builder.addCase(fetchDeleteProducts.fulfilled, (state, action) => {
+         state.data = state.data.filter((e) => e._id !== action.payload._id);
          state.loading = false;
       });
    },
 });
 
-export const { sortedProducts } = productsSlice.actions;
+export const { sortedProducts, total, setCurrentPage, productPerPage } = productsSlice.actions;
 
 export default productsSlice.reducer;

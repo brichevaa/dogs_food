@@ -13,3 +13,6 @@
    align-items: center;
    justify-content: center;
 }
+.not-auth-btn {
+   margin: 30px 0px 0px 0px;
+}

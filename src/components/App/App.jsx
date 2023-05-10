@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useEffect, useState } from 'react';
 import { Footer } from '../Footer/Footer';
 import { Header } from '../Header/Header';
 import './App.css';
 import { useDebounce } from '../../utils/utils';
-
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { CatalogPage } from '../../pages/Catalog/CatalogPage';
 import { ProductPage } from '../../pages/Product/ProductPage';
 import { UserContext } from '../../context/userContext';
@@ -13,7 +12,6 @@ import { CardContext } from '../../context/cardContext';
 import { FaqPage } from '../../pages/FAQ/FaqPage';
 import { NotFound } from '../../pages/NotFound/NotFound';
 import { Favorites } from '../../pages/Favorites/Favorites';
-
 import { Modal } from '../Modal/Modal';
 import { Login } from '../Auth/Login/Login';
 import { Register } from '../Auth/Register/Register';
@@ -25,29 +23,45 @@ import { EditAccount } from '../EditAccount/EditAccount';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../../storageToolkit/user/userSlice';
 import { fetchProducts, fetchSearchProducts } from '../../storageToolkit/products/productsSlice';
+import { Basket } from '../Basket/Basket';
+import { Chart } from '../Chart/Chart';
+import { addItem } from '../../storageToolkit/basket/basketSlice';
+import { BaseButton } from '../BaseButton/BaseButton';
 
 function App() {
    const [cards, setCards] = useState([]);
-   const [searchQuery, setSearchQuery] = useState(undefined);
-   const [basketCounter, setBasketCounter] = useState(0);
+   const [searchRequest, setSearchRequest] = useState(undefined);
    const [modal, setModal] = useState(false);
    const [isAuth, setIsAuth] = useState(false);
 
+   const { favorites } = useSelector((state) => state.products);
+   const { items } = useSelector((state) => state.basket);
+   const actualUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
+
    const dispatch = useDispatch(); // dispatch - передает данные
-   const currentUser = useSelector((state) => state.user.data); //  useSelector - достает измененные данные
-   const { data: products, favorites } = useSelector((state) => state.products);
+
+   const isMounted = useRef(false);
+
+   const onAddToBusket = (product) => {
+      const item = {
+         id: product._id,
+         name: product.name,
+         price: product.price,
+         pictures: product.pictures,
+      };
+      dispatch(addItem(item));
+   };
 
    const handleSearch = (search) => {
       dispatch(fetchSearchProducts(search));
-      // api.searchProducts(search).then((data) => setCards(filteredCards(data, currentUser._id)));
    };
 
-   const debounceValueInApp = useDebounce(searchQuery, 500);
+   const debounceValue = useDebounce(searchRequest, 500);
 
    useEffect(() => {
-      if (debounceValueInApp === undefined) return;
-      handleSearch(debounceValueInApp);
-   }, [debounceValueInApp]);
+      if (debounceValue === undefined) return;
+      handleSearch(debounceValue);
+   }, [debounceValue]);
 
    useEffect(() => {
       if (!isAuth) return;
@@ -55,22 +69,26 @@ function App() {
    }, [dispatch, isAuth]);
 
    useEffect(() => {
-      setCards(products);
-   }, [products, favorites]);
+      if (isMounted.current) {
+         const json = JSON.stringify(items);
+         localStorage.setItem('basket', json);
+      }
+      isMounted.current = true;
+   }, [items]);
 
-   const contextValue = {
-      currentUser,
-      searchQuery,
-      setSearchQuery,
-      basketCounter,
-      setBasketCounter,
+   const contextUserValue = {
+      actualUser,
+      searchRequest,
+      setSearchRequest,
       isAuth,
    };
    const contextCardValue = {
       cards: cards,
       setCards,
       favorites,
-      setBasketCounter,
+      onAddToBusket,
+      modal,
+      setModal,
    };
    const navigate = useNavigate();
 
@@ -85,7 +103,7 @@ function App() {
       // else if (!authPath.includes(location.pathname)) {
       //   navigate('/login');
       //}
-   }, [navigate]);
+   }, []);
 
    const authRoutes = (
       <>
@@ -118,29 +136,35 @@ function App() {
 
    return (
       <>
-         <UserContext.Provider value={contextValue}>
+         <UserContext.Provider value={contextUserValue}>
             <CardContext.Provider value={contextCardValue}>
-               <Header setModal={setModal} modal={modal} />
+               <Header />
                {isAuth ? (
                   <main className="content container">
                      <Routes>
                         <Route path="/" element={<MainPage />}></Route>
+                        <Route path="/chart" element={<Chart />}></Route>
                         <Route path="/catalog" element={<CatalogPage />}></Route>
-                        <Route path="/product/:productId" element={<ProductPage />}></Route>
-                        <Route path="faq" element={<FaqPage />}></Route>
+                        <Route path="/product/:id" element={<ProductPage />}></Route>
+                        <Route path="/faq" element={<FaqPage />}></Route>
                         <Route path="/favorites" element={<Favorites />}></Route>
+                        <Route path="/cart" element={<Basket />}></Route>
                         <Route path="/profile" element={<Profile />}></Route>
                         <Route path="/edit-account" element={<EditAccount />}></Route>
+                        <Route path="*" element={<NotFound />}></Route>
 
                         {authRoutes}
-
-                        <Route path="*" element={<NotFound />}></Route>
                      </Routes>
                   </main>
                ) : (
                   <div className="not-auth">
-                     Пожалуйста, авторизуйтесь.
-                     <Routes>{authRoutes}</Routes>
+                     <div>
+                        Пожалуйста, авторизуйтесь.
+                        <Routes>{authRoutes}</Routes>
+                     </div>
+                     <BaseButton className="not-auth-btn">
+                        <Link to={'/login'}>Войти</Link>
+                     </BaseButton>
                   </div>
                )}
 

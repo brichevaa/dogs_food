@@ -1,55 +1,62 @@
 import { useEffect, useState } from 'react';
+import './index.css';
 import { useParams } from 'react-router-dom';
 import { Product } from '../../components/Product/Product';
 import { api } from '../../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { findLike } from '../../utils/utils';
 import { fetchChangeLikeProduct } from '../../storageToolkit/products/productsSlice';
+import {
+   fetchSingleProduct,
+   changeLikeStatus,
+} from '../../storageToolkit/singleProduct/singleProductSlice';
 
 export const ProductPage = () => {
-   const id = useParams();
-   const currentUser = useSelector((state) => state.user.data);
-
-   const [product, setProduct] = useState(null);
-
+   const idParamsInSearchQuery = useParams();
+   const actualUser = useSelector((state) => state.user.data);
    const dispatch = useDispatch();
 
+   const { product: singleProduct, loading } = useSelector((state) => state.product);
+
    const onProductLike = () => {
-      // const wasLiked = handleProductLike(product);
-      const wasLiked = findLike(product, currentUser);
-      dispatch(fetchChangeLikeProduct(product));
+      const wasLiked = findLike(singleProduct, actualUser);
+      dispatch(fetchChangeLikeProduct(singleProduct));
       if (wasLiked) {
-         const filteredLikes = product.likes.filter((e) => e !== currentUser._id);
-         setProduct({ ...product, likes: filteredLikes });
+         const filteredLikes = singleProduct.likes.filter((e) => e !== actualUser._id);
+         dispatch(changeLikeStatus(filteredLikes));
       } else {
-         const addedLikes = [...product.likes, currentUser._id];
-         setProduct({ ...product, likes: addedLikes });
+         const addedLikes = [...singleProduct.likes, actualUser._id];
+         dispatch(changeLikeStatus(addedLikes));
       }
    };
    const onSendReview = (newProduct) => {
-      setProduct(() => ({ ...newProduct }));
-      // setProduct(newProduct)
+      dispatch(fetchSingleProduct(newProduct._id));
    };
    const deleteReview = async (id) => {
-      const res = await api.deleteReview(product._id, id);
-      setProduct(() => ({ ...res }));
+      const res = await api.deleteReview(singleProduct._id, id);
+      dispatch(fetchSingleProduct(res._id));
+
       return res;
+   };
+   const onUpdateProduct = (newProduct) => {
+      dispatch(fetchSingleProduct(newProduct._id));
    };
 
    useEffect(() => {
-      if (!id.productId) return;
-      api.getProductById(id?.productId).then((data) => setProduct(data));
-   }, [id?.productId]);
+      if (!idParamsInSearchQuery.id) return;
+      dispatch(fetchSingleProduct(idParamsInSearchQuery.id));
+   }, [idParamsInSearchQuery?.id]);
 
-   return product && currentUser ? (
+   return !loading && actualUser ? (
       <Product
-         id={id.productId}
-         product={product}
+         id={idParamsInSearchQuery.id}
+         product={singleProduct}
          onSendReview={onSendReview}
          onDeleteReview={deleteReview}
          onProductLike={onProductLike}
+         onUpdateProduct={onUpdateProduct}
       />
    ) : (
-      <div>Loading</div>
+      <div className="loading">Loading...</div>
    );
 };
