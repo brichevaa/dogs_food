@@ -103,7 +103,7 @@ function App() {
       // else if (!authPath.includes(location.pathname)) {
       //   navigate('/login');
       //}
-   }, [navigate]);
+   }, []);
 
    const authRoutes = (
       <>

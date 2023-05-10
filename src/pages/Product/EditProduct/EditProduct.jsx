@@ -61,6 +61,13 @@ export const EditProduct = ({ setModalEditProduct, id, onUpdateProduct, product 
                         {...register('name', { required: true })}
                      />
                      <input
+                        type="text"
+                        className="auth__input"
+                        placeholder="Скидка"
+                        defaultValue={product.discount}
+                        {...register('discount', { required: true })}
+                     />
+                     <input
                         type="number"
                         className="auth__input"
                         placeholder="Стоимость"
